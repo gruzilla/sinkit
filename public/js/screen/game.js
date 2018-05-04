@@ -46,6 +46,8 @@ var SinkItScreen = function(){
             inputs: getDefaultInputs()
         }
     };
+    
+    var bullets = [];
 
     function preload()
     {
@@ -53,11 +55,15 @@ var SinkItScreen = function(){
         this.load.image('boatBottom', 'assets/boat-red.png');
         this.load.image('boatTop', 'assets/boat-green.png');
         this.load.image('water', 'assets/water.png');
+        this.load.image('cannonball', 'assets/cannonball.png');
         //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     };
+    
+    var physics;
 
     function create()
     {   
+        physics = this.physics;
         var drag = 10;
         var maxVelocity = 65;
         this.add.image(0, 0, 'water').setScale(window.innerWidth,window.innerHeight);
@@ -78,11 +84,24 @@ var SinkItScreen = function(){
         boat.bottom.obj.setMaxVelocity(maxVelocity);
 
     };
+    
+    var fireBullet = function(firingBoat){
+       var bullet = physics.add.image(firingBoat.getBounds().x + firingBoat.getBounds().width * 0.5, firingBoat.getBounds().y, 'cannonball').setScale(0.4);
+       bullet.setBounce(0);
+       bullet.setCollideWorldBounds(false);
+       bullet.setVelocityY(-100);
+       bullet.setAccelerationY(-20);
+       bullets.push(bullet);
+    };
 
     function update()
     {
 
-    };    
+    };
+    
+    var shoot = function(team){
+        fireBullet(boat[team].obj);
+    };
     
     var updateBoat = function(team,data){
         
@@ -104,6 +123,7 @@ var SinkItScreen = function(){
     
     
     return {
+        shoot: shoot,
         updateBoat: updateBoat,
         game: game
     };
