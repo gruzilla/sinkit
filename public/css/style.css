@@ -8,4 +8,15 @@ body {
     height: 50px;
     margin-top: 20vh;
     display: inline-block;
+    margin: 20vh auto;
+}
+
+#increment {
+    background-color: green;
+    border: 3px solid black;
+}
+
+#decrement {
+    background-color: red;
+    border: 3px solid black;
 }
