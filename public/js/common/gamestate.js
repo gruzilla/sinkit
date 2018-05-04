@@ -132,10 +132,17 @@ var GameState = function() {
         dispatch('update');
 
         // reset cannon
-        state.teamA.shootCannon = false;
-        state.teamB.shootCannon = false;
-        state.teamA.cannonLoaded = false;
-        state.teamB.cannonLoaded = false;
+
+        switch (team) {
+            case 'A':
+                state.teamA.shootCannon = false;
+                state.teamA.cannonLoaded = false;
+                break;
+            case 'B':
+                state.teamB.shootCannon = false;
+                state.teamB.cannonLoaded = false;
+                break;
+        }
 
         dispatch('update');
     }
