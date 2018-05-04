@@ -10,10 +10,22 @@
     <body>
         <script type="text/javascript">
         var air_console = new AirConsole();
+        var myCounter = 0;
 
         // Listen for messages from other devices
         air_console.onMessage = function(from, data) {
 
+            if (data === '+1') {
+                myCounter++;
+            } else if (data === '-1') {
+                myCounter--;
+            } else {
+                console.debug('unkown message', from, data);
+            }
+
+            document.getElementById('counter').innerHTML = myCounter;
+
+            /*
             // We receive a message -> Send message back to the device
             air_console.message(from, "Full of pixels!");
 
@@ -21,6 +33,7 @@
             var info = document.createElement('DIV');
             info.innerHTML = data;
             document.body.appendChild(info);
+            */
         };
 
 
@@ -32,7 +45,7 @@
         </script>
 
         <span id="deviceIds"></span>
-        <span id="deviceIds"></span>
+        <span id="counter">0</span>
     </body>
 </html>
 

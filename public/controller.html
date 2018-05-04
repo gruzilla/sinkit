@@ -22,6 +22,14 @@
                 info.innerHTML = data;
                 document.body.appendChild(info);
             };
+
+            function increment() {
+                air_console.message(AirConsole.SCREEN, "+1");
+            }
+
+            function decrement() {
+                air_console.message(AirConsole.SCREEN, "-1");
+            }
         </script>
 
         <button id="increment">+1</button>
