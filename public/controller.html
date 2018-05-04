@@ -21,14 +21,13 @@
         <script type="text/javascript">
             // air console initialisation
             var air_console = new AirConsole();
-            air_console.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
 
             // message dispatcher initialisation
             var md = new MessageDispatcher(air_console);
 
             // message handler registration
             md.register('vibrate', function() {
-                air_console.vibrate(200);
+                airConsole.vibrate(200);
             });
 
             // long running actions

@@ -4,9 +4,11 @@
  * and open the template in the editor.
  */
 
-var Controller = function(){
-    
-    
+var Controller = function(messageDispatcher, gameState, airConsole) {
+
+    function initialize() {
+        airConsole.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
+    }
     return {};
 
 };
