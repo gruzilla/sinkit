@@ -25,20 +25,20 @@ var GameState = function() {
         }
 
         state.player[from] = {
-            currentAction: null
+            actions: {}
         }
     }
 
     function startAction(from, data) {
         initPlayer(from);
-        state.player[from].currentAction = data.action;
+        state.player[from].actions[data.action] = true;
 
         dispatch('update');
     }
 
     function stopAction(from, data) {
         initPlayer(from);
-        state.player[from].currentAction = null;
+        delete state.player[from].actions[data.action];
 
         dispatch('update');
     }

@@ -41,9 +41,9 @@
                 );
                 return false;
             }
-            function endAction() {
+            function stopAction() {
                 md.send(
-                    'endAction',
+                    'stopAction',
                     {
                         action: 'supaÄktschn'
                     }
@@ -52,8 +52,8 @@
             }
             document.getElementById('action').addEventListener('mousedown', startAction);
             document.getElementById('action').addEventListener('touchstart', startAction);
-            document.getElementById('action').addEventListener('mouseup', endAction);
-            document.getElementById('action').addEventListener('touchend', endAction);
+            document.getElementById('action').addEventListener('mouseup', stopAction);
+            document.getElementById('action').addEventListener('touchend', stopAction);
 
             /** legacy game **/
             // local event-listeners, that send or broadcast messages
