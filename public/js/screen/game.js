@@ -78,13 +78,13 @@ var SinkItScreen = function(){
         
     };    
     
-    var updateBoat = function(boat,data){
+    var updateBoat = function(team,data){
         
         Object.keys(data).forEach(function(k){
             
             switch(k) {
                 case "acceleration":
-                    boat[boat].obj.setAcceleration(data[k]);
+                    boat[team].obj.setAcceleration(data[k]);
                     break;
                 default:
                     console.log(k,data[k]);
