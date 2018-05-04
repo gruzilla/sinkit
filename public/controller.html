@@ -24,8 +24,8 @@
             // Listen for messages
             air_console.onMessage = function(from, data) {
                 console.log("receiving message",from,data);
-                console.log(data.action);
-                switch(data.action){
+                console.log(data.data.action);
+                switch(data.data.action){
                     case "vibrate":
                         air_console.vibrate(10);
                         break;
