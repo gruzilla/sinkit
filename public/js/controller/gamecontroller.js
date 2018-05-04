@@ -83,10 +83,16 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         return false;
     }
     function loadCannon() {
+        if (coolDown.loadCannon) {
+            return;
+        }
         messageDispatcher.send('loadCannon');
         startCoolDown('loadCannon');
     }
     function shootCannon() {
+        if (coolDown.shootCannon) {
+            return;
+        }
         messageDispatcher.send('shootCannon');
         startCoolDown('shootCannon');
     }
