@@ -13,6 +13,11 @@
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
+
+        <div style="text-align:center;">
+            <div id="vibrateAll" class="button">vibrate clients</div>
+        </div>
+
         <script type="text/javascript">
             // initialize dependencies
             var air_console = new AirConsole();
@@ -22,7 +27,6 @@
             // link game state and messages received from clients
             md.register('increment', game_state.increment);
             md.register('decrement', game_state.decrement);
-            md.register('vibrate', md.broadcast('vibrate'));
 
             // link game state changes and update of DOM
             game_state.on('update', function(state) {
@@ -33,6 +37,14 @@
                 var ids = air_console.getControllerDeviceIds();
                 document.getElementById('deviceIds').innerHTML = JSON.stringify([ids, user_data]);
             };
+
+            // init local event listener for testing
+            function vibrateClients() {
+                md.broadcast('vibrate');
+            }
+
+            document.getElementById('vibrateAll').addEventListener('click', vibrateClients);
+            document.getElementById('vibrateAll').addEventListener('touchstart', vibrateClients);
         </script>
 
         <span id="deviceIds"></span>
