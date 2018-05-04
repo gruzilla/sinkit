@@ -2,6 +2,8 @@ var GameState = function() {
     var accelerationStep = 5;
     var accelerationMin = -75;
     var accelerationMax = 75;
+    var accelerationTimer = null;
+    var accelerationReductionInterval = 750;
 
     var state = {
         player: {},
@@ -89,7 +91,8 @@ var GameState = function() {
     }
 
     function accelerateRight(from) {
-        switch (getTeam(from)) {
+        var team = isNaN(from) ? from : getTeam(from);
+        switch (team) {
             case 'A':
                 state.accelerationA = Math.min(
                     accelerationMax,
@@ -108,7 +111,8 @@ var GameState = function() {
     }
 
     function accelerateLeft(from) {
-        switch (getTeam(from)) {
+        var team = isNaN(from) ? from : getTeam(from);
+        switch (team) {
             case 'A':
                 state.accelerationA = Math.max(
                     accelerationMin,
@@ -126,6 +130,38 @@ var GameState = function() {
         dispatch('update');
     }
 
+    function reduceAcceleration() {
+        if (state.accelerationA > 0) {
+            console.debug('reducing acceleration team A');
+            accelerateLeft('A');
+        } else if (state.accelerationA < 0) {
+            console.debug('reducing acceleration team A');
+            accelerateRight('A');
+        }
+
+        if (state.accelerationB > 0) {
+            console.debug('reducing acceleration team B');
+            accelerateLeft('B');
+        } else if (state.accelerationB < 0) {
+            console.debug('reducing acceleration team B');
+            accelerateRight('B');
+        }
+    }
+
+    function startAccelerationTimer() {
+        if (accelerationTimer != null) {
+            return;
+        }
+
+        console.debug('starting acceleration timer');
+        accelerationTimer = window.setInterval(
+            function() {
+                reduceAcceleration();
+            },
+            accelerationReductionInterval
+        );
+    }
+
     return {
         on: on,
 
@@ -135,6 +171,7 @@ var GameState = function() {
         leaveGame: leaveGame,
 
         accelerateRight: accelerateRight,
-        accelerateLeft: accelerateLeft
+        accelerateLeft: accelerateLeft,
+        startAccelerationTimer: startAccelerationTimer
     };
 };

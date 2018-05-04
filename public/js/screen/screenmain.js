@@ -10,28 +10,31 @@ var Screen = function(messageDispatcher, gameState, airConsole){
 
     function initialize() {
         /* messages, that will come, when players use the TeamController */
-        md.register('joinTeam', game_state.joinTeam);
+        md.register('joinTeam', gameState.joinTeam);
 
         /* messages, that will come, when players use the GameController */
-        md.register('startAction', game_state.startAction);
-        md.register('stopAction', game_state.stopAction);
+        md.register('startAction', gameState.startAction);
+        md.register('stopAction', gameState.stopAction);
         // legacy
-        md.register('accelerateRight', game_state.accelerateRight);
-        md.register('accelerateLeft', game_state.accelerateLeft);
+        md.register('accelerateRight', gameState.accelerateRight);
+        md.register('accelerateLeft', gameState.accelerateLeft);
         md.register('vibrate', function vibrateClients() {
             md.broadcast('vibrate');
         });
 
         // remove player when they leave the session
-        airConsole.onActivePlayersChange = game_state.leaveGame;
+        airConsole.onActivePlayersChange = gameState.leaveGame;
 
         // link game state changes and update of DOM
-        game_state.on('update', function(state) {
+        gameState.on('update', function(state) {
             document.getElementById('gamestate').innerHTML = JSON.stringify(state);
 
             game.updateBoat('top', {acceleration: state.accelerationA});
             game.updateBoat('bottom', {acceleration: state.accelerationB});
         });
+
+        // initialize acceleration obstacle
+        gameState.startAccelerationTimer();
     }
 
     initialize();
