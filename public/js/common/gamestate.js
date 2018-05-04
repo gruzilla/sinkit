@@ -85,7 +85,7 @@ var GameState = function() {
             state.teamA.player.push(from);
             state.player[from].role = availableRoles[state.teamA.roleIndex];
             state.teamA.roleIndex++;
-            if (state.teamA.roleIndex > availableRoles.length) {
+            if (state.teamA.roleIndex >= availableRoles.length) {
                 state.teamA.roleIndex = 0;
             }
         }
@@ -93,7 +93,7 @@ var GameState = function() {
             state.teamB.player.push(from);
             state.player[from].role = availableRoles[state.teamB.roleIndex];
             state.teamB.roleIndex++;
-            if (state.teamB.roleIndex > availableRoles.length) {
+            if (state.teamB.roleIndex >= availableRoles.length) {
                 state.teamB.roleIndex = 0;
             }
         }
