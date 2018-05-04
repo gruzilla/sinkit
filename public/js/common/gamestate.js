@@ -1,6 +1,7 @@
 var GameState = function() {
     var state = {
-        counter: 0
+        counter: 0,
+        player: {}
     };
 
     var listener = {};
@@ -18,6 +19,31 @@ var GameState = function() {
         listener[type] = callback.bind(this);
     }
 
+    function initPlayer(from) {
+        if (from in state.player) {
+            return;
+        }
+
+        state.player[from] = {
+            currentAction: null
+        }
+    }
+
+    function startAction(from, data) {
+        initPlayer(from);
+        state.player[from].currentAction = data.action;
+
+        dispatch('update');
+    }
+
+    function stopAction(from, data) {
+        initPlayer(from);
+        state.player[from].currentAction = null;
+
+        dispatch('update');
+    }
+
+    /* legacy +- game */
     function increment() {
         state.counter++;
 
@@ -32,6 +58,11 @@ var GameState = function() {
 
     return {
         on: on,
+
+        startAction: startAction,
+        stopAction: stopAction,
+
+        /* legacy game */
         increment: increment,
         decrement: decrement
     };

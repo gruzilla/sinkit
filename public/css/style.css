@@ -10,6 +10,12 @@ body {
     display: inline-block;
 }
 
+#action {
+    background-color: deeppink;
+    border: 3px solid black;
+}
+
+/** legacy buttons **/
 #increment {
     background-color: green;
     border: 3px solid black;
