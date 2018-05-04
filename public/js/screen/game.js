@@ -89,7 +89,6 @@ var SinkItScreen = function(){
             switch(k) {
                 case "acceleration":
                     boat[team].obj.setAccelerationX(data[k]);
-                    console.log(boat[team].obj.getVelocityX());
                     break;
                 default:
                     console.log(k,data[k]);
