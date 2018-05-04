@@ -18,6 +18,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         // legacy
         md.register('accelerate', gameState.accelerate);
         md.register('loadCannon', gameState.loadCannon);
+        md.register('shootCannon', gameState.shootCannon);
         md.register('vibrate', function vibrateClients() {
             md.broadcast('vibrate');
         });
@@ -32,9 +33,12 @@ var Screen = function(messageDispatcher, gameState, airConsole){
             game.updateBoat('top', {acceleration: state.teamA.acceleration});
             game.updateBoat('bottom', {acceleration: state.teamB.acceleration});
 
-            if (state.teamA.cannonLoaded && state.teamA.fireNow)
-            game.updateBoat('top', {fire: true});
-            game.updateBoat('bottom', {fire: true});
+            if (state.teamA.cannonLoaded && state.teamA.shootCannon) {
+                game.updateBoat('top', {shoot: true});
+            }
+            if (state.teamB.cannonLoaded && state.teamB.shootCannon) {
+                game.updateBoat('bottom', {shoot: true});
+            }
         });
 
         // initialize acceleration obstacle
