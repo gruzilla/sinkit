@@ -42,6 +42,14 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
         document.getElementById('teamB').addEventListener('touchstart', function () { return joinTeam('B'); });
     }
 
+    messageDispatcher.register('playerUpdate', function(from, data) {
+        if (from !== AirConsole.SCREEN) {
+            return;
+        }
+
+        localStorage.setItem('playerData', JSON.stringify(data));
+    });
+
     function update () {
 
     }
