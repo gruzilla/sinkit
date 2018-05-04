@@ -59,6 +59,18 @@ var GameState = function() {
         dispatch('update');
     }
 
+    function leaveGame(playerNumber) {
+        var ia = state.teamA.indexOf(playerNumber);
+        if (ia > -1) { state.teamA.splice(ia, 1); }
+        var ib = state.teamB.indexOf(playerNumber);
+        if (ib > -1) { state.teamB.splice(ib, 1); }
+        if (playerNumber in state.player) {
+            delete state.player[playerNumber];
+        }
+
+        dispatch('update');
+    }
+
     /* legacy +- game */
     function increment() {
         state.counter++;
@@ -78,6 +90,7 @@ var GameState = function() {
         startAction: startAction,
         stopAction: stopAction,
         joinTeam: joinTeam,
+        leaveGame: leaveGame,
 
         /* legacy game */
         increment: increment,

@@ -20,6 +20,9 @@ var Screen = function(messageDispatcher, gameState, airConsole){
             md.broadcast('vibrate');
         });
 
+        // remove player when they leave the session
+        airConsole.onActivePlayersChange = game_state.leaveGame;
+
         // link game state changes and update of DOM
         game_state.on('update', function(state) {
             document.getElementById('gamestate').innerHTML = JSON.stringify(state);
@@ -33,13 +36,4 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         game: function(){ return game; }
     };
 
-};
-
-
-// initialize dependencies
-
-
-air_console.onDeviceStateChange = function(device_id, user_data) {
-    var ids = air_console.getControllerDeviceIds();
-    document.getElementById('deviceIds').innerHTML = JSON.stringify([ids, user_data]);
 };
