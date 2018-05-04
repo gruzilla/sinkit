@@ -113,24 +113,26 @@ var GameState = function() {
 
     // not called directly, that's why the direction is 2nd arg, not data
     function accelerate(from, direction, step) {
+        //console.debug('internal acceleration', arguments);
         if (typeof(step) === 'undefined') {
             step = accelerationStep;
         }
 
         step *= (direction >= 0 ? 1 : -1);
         var minMax = direction >= 0 ? 'min' : 'max';
+        var accelerationCmp = direction >= 0 ? accelerationMax : accelerationMin;
 
         var team = isNaN(from) ? from : getTeam(from);
         switch (team) {
             case 'A':
                 state.teamA.acceleration = Math[minMax](
-                    accelerationMax,
+                    accelerationCmp,
                     state.teamA.acceleration + step
                 );
                 break;
             case 'B':
                 state.teamB.acceleration = Math[minMax](
-                    accelerationMax,
+                    accelerationCmp,
                     state.teamB.acceleration + step
                 );
                 break;
@@ -180,6 +182,7 @@ var GameState = function() {
         leaveGame: leaveGame,
         loadCannon: loadCannon,
         accelerate: function(from, data) {
+            //console.debug('acceleration delegator', arguments);
             if (!('direction' in data)) {
                 return;
             }

@@ -29,8 +29,8 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         gameState.on('update', function(state) {
             document.getElementById('gamestate').innerHTML = JSON.stringify(state);
 
-            game.updateBoat('top', {acceleration: state.accelerationA});
-            game.updateBoat('bottom', {acceleration: state.accelerationB});
+            game.updateBoat('top', {acceleration: state.teamA.acceleration});
+            game.updateBoat('bottom', {acceleration: state.teamB.acceleration});
         });
 
         // initialize acceleration obstacle
