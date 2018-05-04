@@ -6,8 +6,11 @@
 
 var Screen = function(){
     
+    var game = new SinkItScreen();
     
-    return {};
+    return { 
+        game: function(){ return game; }
+    };
 
 };
 
