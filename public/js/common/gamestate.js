@@ -1,5 +1,5 @@
 var GameState = function() {
-    var accelerationStep = 5;
+    var accelerationStep = 10;
     var accelerationMin = -75;
     var accelerationMax = 75;
     var accelerationTimer = null;
@@ -90,19 +90,23 @@ var GameState = function() {
         dispatch('update');
     }
 
-    function accelerateRight(from) {
+    function accelerateRight(from, step) {
+        if (typeof(step) === 'undefined') {
+            step = accelerationStep;
+        }
+
         var team = isNaN(from) ? from : getTeam(from);
         switch (team) {
             case 'A':
                 state.accelerationA = Math.min(
                     accelerationMax,
-                    state.accelerationA + accelerationStep
+                    state.accelerationA + step
                 );
                 break;
             case 'B':
                 state.accelerationB = Math.min(
                     accelerationMax,
-                    state.accelerationB + accelerationStep
+                    state.accelerationB + step
                 );
                 break;
         }
@@ -110,19 +114,23 @@ var GameState = function() {
         dispatch('update');
     }
 
-    function accelerateLeft(from) {
+    function accelerateLeft(from, step) {
+        if (typeof(step) === 'undefined') {
+            step = accelerationStep;
+        }
+
         var team = isNaN(from) ? from : getTeam(from);
         switch (team) {
             case 'A':
                 state.accelerationA = Math.max(
                     accelerationMin,
-                    state.accelerationA - accelerationStep
+                    state.accelerationA - step
                 );
                 break;
             case 'B':
                 state.accelerationB = Math.max(
                     accelerationMin,
-                    state.accelerationB - accelerationStep
+                    state.accelerationB - step
                 );
                 break;
         }
@@ -133,18 +141,18 @@ var GameState = function() {
     function reduceAcceleration() {
         if (state.accelerationA > 0) {
             console.debug('reducing acceleration team A');
-            accelerateLeft('A');
+            accelerateLeft('A', accelerationStep/2);
         } else if (state.accelerationA < 0) {
             console.debug('reducing acceleration team A');
-            accelerateRight('A');
+            accelerateRight('A', accelerationStep/2);
         }
 
         if (state.accelerationB > 0) {
             console.debug('reducing acceleration team B');
-            accelerateLeft('B');
+            accelerateLeft('B', accelerationStep/2);
         } else if (state.accelerationB < 0) {
             console.debug('reducing acceleration team B');
-            accelerateRight('B');
+            accelerateRight('B', accelerationStep/2);
         }
     }
 
