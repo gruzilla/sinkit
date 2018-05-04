@@ -10,12 +10,14 @@ var GameState = function() {
         teamA: {
             player: [],
             acceleration: 0,
-            cannonLoaded: false
+            cannonLoaded: false,
+            shootCannon: false
         },
         teamB: {
             player: [],
             acceleration: 0,
-            cannonLoaded: false
+            cannonLoaded: false,
+            shootCannon: false
         }
     };
 
@@ -97,6 +99,8 @@ var GameState = function() {
     }
 
     function loadCannon(from) {
+        console.log('GS change: loadCannon');
+
         var team = isNaN(from) ? from : getTeam(from);
 
         switch (team) {
@@ -107,6 +111,31 @@ var GameState = function() {
                 state.teamB.cannonLoaded = true;
                 break;
         }
+
+        dispatch('update');
+    }
+
+    function shootCannon(from) {
+        console.log('GS change: shootCannon');
+
+        var team = isNaN(from) ? from : getTeam(from);
+
+        switch (team) {
+            case 'A':
+                state.teamA.shootCannon = true;
+                break;
+            case 'B':
+                state.teamB.shootCannon = true;
+                break;
+        }
+
+        dispatch('update');
+
+        // reset cannon
+        state.teamA.shootCannon = false;
+        state.teamB.shootCannon = false;
+        state.teamA.cannonLoaded = false;
+        state.teamB.cannonLoaded = false;
 
         dispatch('update');
     }
@@ -181,6 +210,7 @@ var GameState = function() {
         joinTeam: joinTeam,
         leaveGame: leaveGame,
         loadCannon: loadCannon,
+        shootCannon: shootCannon,
         accelerate: function(from, data) {
             //console.debug('acceleration delegator', arguments);
             if (!('direction' in data)) {
