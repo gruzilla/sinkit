@@ -31,10 +31,12 @@ var GameController = function(divId, messageDispatcher, airConsole) {
     /** legacy game **/
     // local event-listeners, that send or broadcast messages
     function accelerateRight() {
+        airConsole.vibrate(20);
         messageDispatcher.send('accelerateRight');
         return false;
     }
     function accelerateLeft() {
+        airConsole.vibrate(20);
         messageDispatcher.send('accelerateLeft');
         return false;
     }

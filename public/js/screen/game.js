@@ -59,7 +59,7 @@ var SinkItScreen = function(){
     function create()
     {   
         
-        var friction = 10;
+        var friction = 0.1;
         
         this.add.image(0, 0, 'water').setScale(window.innerWidth,window.innerHeight);
         
@@ -90,6 +90,7 @@ var SinkItScreen = function(){
             switch(k) {
                 case "acceleration":
                     boat[team].obj.setAccelerationX(data[k]);
+                    console.log(boat[team].obj.getVelocityX());
                     break;
                 default:
                     console.log(k,data[k]);
