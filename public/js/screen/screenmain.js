@@ -7,11 +7,13 @@
 var Screen = function(messageDispatcher, gameState, airConsole){
 
     function initialize() {
-        // link game state and messages received from clients
+        /* messages, that will come, when players use the TeamController */
+        md.register('joinTeam', game_state.joinTeam);
+
+        /* messages, that will come, when players use the GameController */
         md.register('startAction', game_state.startAction);
         md.register('stopAction', game_state.stopAction);
-
-        /* legacy +-vib game */
+        // legacy
         md.register('increment', game_state.increment);
         md.register('decrement', game_state.decrement);
         md.register('vibrate', function vibrateClients() {

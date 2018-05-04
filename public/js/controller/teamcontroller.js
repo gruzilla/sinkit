@@ -4,27 +4,51 @@
  * and open the template in the editor.
  */
 
-var TeamController = function(){
+var TeamController = function(divId, messageDispatcher, airConsole) {
 
-    function preload ()
-    {
+    var onFinishedCallback = function() {};
+
+    /** game actions **/
+    // long running actions
+    function joinTeam(team) {
+        messageDispatcher.send(
+            'joinTeam',
+            { team: team }
+        );
+        onFinishedCallback();
+        return false;
+    }
+
+    function onFinished(callback) {
+        onFinishedCallback = callback;
+    }
+
+    function preload () {
         //this.load.image('sky', 'src/games/firstgame/assets/sky.png');
         //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     }
 
-    function create ()
-    {
-        //this.add.image(400, 300, 'sky');
+    function create () {
+        airConsole.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
+
+        document.getElementById(divId).innerHTML = '' +
+            '<div id="teamA" class="button">Team TOP</div>' +
+            '<div id="teamB" class="button">Team BOTTOM</div>';
+
+        // register event listener
+        document.getElementById('teamA').addEventListener('click', function () { return joinTeam('A'); });
+        document.getElementById('teamA').addEventListener('touchstart', function () { return joinTeam('A'); });
+        document.getElementById('teamB').addEventListener('click', function () { return joinTeam('B'); });
+        document.getElementById('teamB').addEventListener('touchstart', function () { return joinTeam('B'); });
     }
 
-    function update ()
-    {
+    function update () {
 
     }
-
 
     return {
-
+        create: create,
+        onFinished: onFinished
     };
 };
 

@@ -27,7 +27,8 @@ var GameState = function() {
         }
 
         state.player[from] = {
-            actions: {}
+            actions: {},
+            team: ''
         }
     }
 
@@ -41,6 +42,19 @@ var GameState = function() {
     function stopAction(from, data) {
         initPlayer(from);
         delete state.player[from].actions[data.action];
+
+        dispatch('update');
+    }
+
+    function joinTeam(from, data) {
+        initPlayer(from);
+        state.player[from].team = data.team;
+        if (data.team === 'A') {
+            state.teamA.push(from);
+        }
+        if (data.team === 'B') {
+            state.teamB.push(from);
+        }
 
         dispatch('update');
     }
@@ -63,6 +77,7 @@ var GameState = function() {
 
         startAction: startAction,
         stopAction: stopAction,
+        joinTeam: joinTeam,
 
         /* legacy game */
         increment: increment,

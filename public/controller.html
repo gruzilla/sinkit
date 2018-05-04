@@ -6,16 +6,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script type="text/javascript" src="js/external/airconsole-1.7.0.js"></script>
         <script type="text/javascript" src="js/common/messagedispatcher.js"></script>
+        <script type="text/javascript" src="js/controller/gamecontroller.js"></script>
+        <script type="text/javascript" src="js/controller/teamcontroller.js"></script>
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
 
-        <div style="text-align:center;">
-            <div id="action" class="button">action</div>
-            <!-- legacy game interactions -->
-            <div id="increment" class="button">+1</div>
-            <div id="decrement" class="button">-1</div>
-            <div id="vibrate" class="button">vibrate all</div>
+        <div id="controller" style="text-align:center;">
         </div>
 
         <script type="text/javascript">
@@ -25,57 +22,13 @@
             // message dispatcher initialisation
             var md = new MessageDispatcher(air_console);
 
-            // message handler registration
-            md.register('vibrate', function() {
-                airConsole.vibrate(200);
-            });
+            var teamCtrl = new TeamController('controller', md, air_console);
+            var gameCtrl = new GameController('controller', md, air_console);
 
-            // long running actions
-            function startAction() {
-                md.send(
-                    'startAction',
-                    {
-                        action: 'supaÄktschn'
-                    }
-                );
-                return false;
-            }
-            function stopAction() {
-                md.send(
-                    'stopAction',
-                    {
-                        action: 'supaÄktschn'
-                    }
-                );
-                return false;
-            }
-            document.getElementById('action').addEventListener('mousedown', startAction);
-            document.getElementById('action').addEventListener('touchstart', startAction);
-            document.getElementById('action').addEventListener('mouseup', stopAction);
-            document.getElementById('action').addEventListener('touchend', stopAction);
-
-            /** legacy game **/
-            // local event-listeners, that send or broadcast messages
-            function increment() {
-                md.send('increment');
-                return false;
-            }
-            function decrement() {
-                md.send('decrement');
-                return false;
-            }
-            function vibrate() {
-                md.send('vibrate');
-                return false;
-            }
-
-            // register event listener
-            document.getElementById('increment').addEventListener('click', increment);
-            document.getElementById('decrement').addEventListener('click', decrement);
-            document.getElementById('vibrate').addEventListener('click', vibrate);
-            document.getElementById('increment').addEventListener('touchstart', increment);
-            document.getElementById('decrement').addEventListener('touchstart', decrement);
-            document.getElementById('vibrate').addEventListener('touchstart', vibrate);
+            teamCtrl.create();
+            teamCtrl.onFinished(function() {
+                gameCtrl.create();
+            })
         </script>
     </body>
 </html>
