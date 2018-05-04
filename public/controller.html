@@ -38,12 +38,18 @@
                 md.send('decrement');
                 return false;
             }
+            function vibrate() {
+                md.send('vibrate');
+                return false;
+            }
 
             // register event listener
             document.getElementById('increment').addEventListener('click', increment);
             document.getElementById('decrement').addEventListener('click', decrement);
+            document.getElementById('vibrate').addEventListener('click', vibrate);
             document.getElementById('increment').addEventListener('touchstart', increment);
             document.getElementById('decrement').addEventListener('touchstart', decrement);
+            document.getElementById('vibrate').addEventListener('touchstart', vibrate);
         </script>
     </body>
 </html>
