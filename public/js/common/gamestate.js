@@ -99,7 +99,7 @@ var GameState = function() {
         }
 
         dispatch('update');
-        dispatch('updatePlayer', {
+        dispatch('playerChosen', {
             id: from,
             data: state.player[from]
         });
