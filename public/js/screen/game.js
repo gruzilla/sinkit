@@ -5,7 +5,9 @@
  */
 
 var SinkItScreen = function(){
-    
+    var drag = 20;
+    var maxVelocity = 100;
+
     var screenWidth = window.innerWidth;
     var screenHeight = window.innerHeight;
     
@@ -72,8 +74,6 @@ var SinkItScreen = function(){
     {   
         gameObj = this; //ugly hack 1
         physics = this.physics; //ugly hack2
-        var drag = 10;
-        var maxVelocity = 65;
         mainCamera = this.cameras.add(0,0,screenWidth,screenHeight);
         
         this.add.image(0, 0, 'water').setScale(window.innerWidth,window.innerHeight);

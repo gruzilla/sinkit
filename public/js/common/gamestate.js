@@ -1,7 +1,7 @@
 var GameState = function() {
-    var accelerationStep = 10;
-    var accelerationMin = -75;
-    var accelerationMax = 75;
+    var accelerationStep = 50;
+    var accelerationMin = -300;
+    var accelerationMax = 300;
     var accelerationTimer = null;
     var accelerationReductionInterval = 750;
 
@@ -132,10 +132,17 @@ var GameState = function() {
         dispatch('update');
 
         // reset cannon
-        state.teamA.shootCannon = false;
-        state.teamB.shootCannon = false;
-        state.teamA.cannonLoaded = false;
-        state.teamB.cannonLoaded = false;
+
+        switch (team) {
+            case 'A':
+                state.teamA.shootCannon = false;
+                state.teamA.cannonLoaded = false;
+                break;
+            case 'B':
+                state.teamB.shootCannon = false;
+                state.teamB.cannonLoaded = false;
+                break;
+        }
 
         dispatch('update');
     }
@@ -154,12 +161,18 @@ var GameState = function() {
         var team = isNaN(from) ? from : getTeam(from);
         switch (team) {
             case 'A':
+                if (state.teamA.acceleration < 0 && direction > 0 || state.teamA.acceleration > 0 && direction < 0) {
+                    state.teamA.acceleration = 0;
+                }
                 state.teamA.acceleration = Math[minMax](
                     accelerationCmp,
                     state.teamA.acceleration + step
                 );
                 break;
             case 'B':
+                if (state.teamB.acceleration < 0 && direction > 0 || state.teamB.acceleration > 0 && direction < 0) {
+                    state.teamB.acceleration = 0;
+                }
                 state.teamB.acceleration = Math[minMax](
                     accelerationCmp,
                     state.teamB.acceleration + step
