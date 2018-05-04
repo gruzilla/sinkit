@@ -8,7 +8,7 @@ body {
     height: 25vh;
     min-height: 40px;
     display: inline-block;
-    margin: 0 5vw;
+    margin: 5vw 30px;
 }
 
 #increment {
