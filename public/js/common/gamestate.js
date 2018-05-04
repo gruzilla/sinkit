@@ -1,6 +1,5 @@
 var GameState = function() {
     var state = {
-        counter: 0,
         player: {},
         teamA: [],
         teamB: [],
