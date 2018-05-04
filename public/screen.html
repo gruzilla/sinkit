@@ -17,7 +17,7 @@
             // initialize dependencies
             var air_console = new AirConsole();
             var game_state = new GameState();
-            var md = new MessageDispatcher();
+            var md = new MessageDispatcher(air_console);
 
             // link game state and messages received from clients
             md.register('increment', game_state.increment);
