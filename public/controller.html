@@ -24,16 +24,13 @@
             // Listen for messages
             air_console.onMessage = function(from, data) {
                 console.log("receiving message",from,data);
-                if(typeof data.action != "undefined"){
-                    
-                    switch(data.action){
-                        case "vibrate":
-                            air_console.vibrate(10);
-                            break;
-                        default:
-                    }
+                console.log(data.action);
+                switch(data.action){
+                    case "vibrate":
+                        air_console.vibrate(10);
+                        break;
+                    default:
                 }
-                
             };
 
             function increment() {
