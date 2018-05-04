@@ -5,6 +5,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.7.0.js"></script>
+        <script type="text/javascript" src="js/common/messagedispatcher.js"></script>
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
@@ -15,34 +16,29 @@
         </div>
 
         <script type="text/javascript">
+            // air console initialisation
             var air_console = new AirConsole();
-
-            // Send a message to the screen
-            air_console.message(AirConsole.SCREEN, "How are you?");
             air_console.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
 
-            // Listen for messages
-            air_console.onMessage = function(from, data) {
-                console.log("receiving message",from,data);
-                console.log(data.data.action);
-                switch(data.data.action){
-                    case "vibrate":
-                        air_console.vibrate(200);
-                        break;
-                    default:
-                }
-            };
+            // message dispatcher initialisation
+            var md = new MessageDispatcher(air_console);
 
+            // message handler registration
+            md.register('vibrate', function() {
+                air_console.vibrate(200);
+            });
+
+            // local event-listeners, that send or broadcast messages
             function increment() {
-                air_console.message(AirConsole.SCREEN, "+1");
+                md.send('increment');
                 return false;
             }
-
             function decrement() {
-                air_console.message(AirConsole.SCREEN, "-1");
+                md.send('decrement');
                 return false;
             }
 
+            // register event listener
             document.getElementById('increment').addEventListener('click', increment);
             document.getElementById('decrement').addEventListener('click', decrement);
             document.getElementById('increment').addEventListener('touchstart', increment);

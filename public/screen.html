@@ -5,60 +5,34 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.7.0.js"></script>
+        <script type="text/javascript" src="js/common/messagedispatcher.js"></script>
+        <script type="text/javascript" src="js/common/gamestate.js"></script>
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
         <script type="text/javascript">
-        var air_console = new AirConsole();
-        var myCounter = 0;
-        var broadcast = false;
+            // initialize dependencies
+            var air_console = new AirConsole();
+            var game_state = new GameState();
+            var md = new MessageDispatcher();
 
-        // Listen for messages from other devices
-        air_console.onMessage = function(from, data) {
+            // link game state and messages received from clients
+            md.register('increment', game_state.increment);
+            md.register('decrement', game_state.decrement);
+            md.register('vibrate', md.broadcast('vibrate'));
 
-            if (data === '+1') {
-                myCounter++;
-            } else if (data === '-1') {
-                myCounter--;
-            } else {
-                console.debug('unkown message', from, data);
-            }
+            // link game state changes and update of DOM
+            game_state.on('update', function(state) {
+                document.getElementById('counter').innerHTML = state.counter;
+            });
 
-            document.getElementById('counter').innerHTML = myCounter;
-            
-            if(!broadcast){
-                broadcast = setTimeout(function(){
-                    console.log("sending broadcast");
-                    air_console.broadcast({
-                        data: {
-                            action: "vibrate"
-                        } 
-                    });
-                    broadcast = false;
-                },250);
-            }
-
-            /*
-            // We receive a message -> Send message back to the device
-            air_console.message(from, "Full of pixels!");
-
-            // Show message on device screen
-            var info = document.createElement('DIV');
-            info.innerHTML = data;
-            document.body.appendChild(info);
-            */
-        };
-
-
-        air_console.onDeviceStateChange = function(device_id, user_data) {
-            var ids = air_console.getControllerDeviceIds();
-            document.getElementById('deviceIds').innerHTML = JSON.stringify([ids, user_data]);
-        };
-
+            air_console.onDeviceStateChange = function(device_id, user_data) {
+                var ids = air_console.getControllerDeviceIds();
+                document.getElementById('deviceIds').innerHTML = JSON.stringify([ids, user_data]);
+            };
         </script>
 
         <span id="deviceIds"></span>
-        
         <p>
             <span id="counter">0</span>
         </p>
