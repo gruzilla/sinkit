@@ -21,7 +21,16 @@
             info.innerHTML = data;
             document.body.appendChild(info);
         };
+
+
+        air_console.onDeviceStateChange = function(device_id, user_data) {
+            var ids = air_console.getControllerDeviceIds();
+            document.getElementById('deviceIds').innerHTML = JSON.stringify(ids);
+        }
+
         </script>
+
+        <span id="deviceIds"></span>
     </body>
 </html>
 
