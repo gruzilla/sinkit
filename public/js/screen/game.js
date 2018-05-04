@@ -4,11 +4,14 @@
  * and open the template in the editor.
  */
 
-var SinkItScreen = function(){
+var SinkItScreen = function(restart){
     var drag = 20;
     var maxVelocity = 100;
     var boatLives = 1;
     var boatScale = 0.4;
+    var restartCallback = restart;
+    var stopUpdate = false;
+    var ignoreHits = false;
 
     var screenWidth = window.innerWidth;
     var screenHeight = window.innerHeight;
@@ -127,6 +130,8 @@ var SinkItScreen = function(){
 
     function update(){
         
+        if(stopUpdate) return;
+        
         for(var i = bullets.length - 1; i >= 0; i--){           
             if(bullets[i].x < 0 || bullets[i].x > screenWidth || bullets[i].y < 0 || bullets[i].y > screenHeight){
                 bullets[i].destroy();
@@ -136,22 +141,33 @@ var SinkItScreen = function(){
         }
 
         if(boat.bottom.data.lives == 0 && boat.bottom.obj.alpha > 0){
+            ignoreHits = true;
             boat.bottom.obj.alpha -= 0.007;
             boatScale *= 0.995;
             boatScale = Math.max(0,boatScale);
             boat.bottom.obj.setScale(boatScale);
+        } else if(boat.bottom.data.lives == 0 && boat.bottom.obj.alpha <= 0){
+            stopUpdate = true;
+            alert("Team Top hat gewonnen!");
+            restartCallback();
         }
         
         if(boat.top.data.lives == 0 && boat.top.obj.alpha > 0){
+            ignoreHits = true;
             boat.top.obj.alpha -= 0.007;
             boatScale *= 0.995;
             boatScale = Math.max(0,boatScale);
             boat.top.obj.setScale(boatScale);
+        } else if(boat.top.data.lives == 0 && boat.top.obj.alpha <= 0){
+            stopUpdate = true;
+            alert("Team Bottom hat gewonnen!");
+            restartCallback();
         }
         
     };
     
     var hitBoat = function(attacker,hitBoat){
+        if(ignoreHits) return false;
         var lives = boat[hitBoat.name].data.lives--;
         if(lives == 0){
 
@@ -163,10 +179,13 @@ var SinkItScreen = function(){
     
     var shoot = function(team){
         fireBullet(team,boat[team].obj);  
-        console.log(boat.bottom.obj.body);
     };
     
     var updateBoat = function(team,data){
+        
+        if(boat[team].data.lives == 0){
+            return false;
+        }
         
         Object.keys(data).forEach(function(k){
             
@@ -186,8 +205,6 @@ var SinkItScreen = function(){
         
     };
 
-    
-    
     return {
         shoot: shoot,
         updateBoat: updateBoat,

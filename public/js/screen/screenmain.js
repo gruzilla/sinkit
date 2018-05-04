@@ -6,7 +6,15 @@
 
 var Screen = function(messageDispatcher, gameState, airConsole){
 
-    var game = new SinkItScreen(gameState, airConsole);
+    var game;
+
+    var restart = function(){
+        delete game;
+        document.getElementById("game").innerHTML = "";
+        game = new SinkItScreen(restart);
+    };
+
+    game = new SinkItScreen(restart);
 
     function initialize() {
         /* messages, that will come, when players use the TeamController */
@@ -52,7 +60,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
     initialize();
 
     return {
-        game: game
+        game: function(){ return game; }
     };
 
 };
