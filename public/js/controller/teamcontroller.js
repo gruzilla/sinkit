@@ -35,9 +35,7 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
             '<div id="teamB" class="button">Team BOTTOM</div>';
 
         // register event listener
-        document.getElementById('teamA').addEventListener('click', function () { return joinTeam('A'); });
         document.getElementById('teamA').addEventListener('touchstart', function () { return joinTeam('A'); });
-        document.getElementById('teamB').addEventListener('click', function () { return joinTeam('B'); });
         document.getElementById('teamB').addEventListener('touchstart', function () { return joinTeam('B'); });
     }
 
