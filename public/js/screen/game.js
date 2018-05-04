@@ -71,12 +71,13 @@ var SinkItScreen = function(){
     };
     
     
-    var updateBoats = function(boat,value){
+    var updateBoat = function(boat,value){
         
     };
     
     
     return {
+        updateBoat: updateBoat,
         game: game
     };
 };
