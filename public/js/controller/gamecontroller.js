@@ -6,6 +6,12 @@
 
 var GameController = function(divId, messageDispatcher, airConsole) {
     var onFinishedCallback = function() {};
+    var coolDown = {
+        loadCannon: false,
+        shootCannon: true,
+    };
+    var coolDownTimeout = 1000;
+    var coolDownInterval = 10;
     var hapticFeedback = 15;
 
     /** game actions **/
@@ -29,7 +35,42 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         onFinishedCallback = callback;
     }
 
-    /** legacy game **/
+    function startCoolDown(coolDownTrigger) {
+        if (!(coolDownTrigger in coolDown) || !coolDown[coolDownTrigger]) {
+            return;
+        }
+
+        coolDown[coolDownTrigger] = true;
+        var progress = coolDownTimeout;
+        var coolDowner = window.setInterval(
+            function() {
+                progress -= coolDownInterval;
+                updateCoolDownObject(coolDownTrigger, 1 - progress / coolDownInterval);
+            },
+            coolDownInterval
+        );
+        window.setTimeout(
+            function() {
+                window.clearInterval(coolDowner);
+                coolDown[coolDownTrigger] = false;
+                updateCoolDownObject(coolDownTrigger, 'finished');
+            },
+            coolDownTimeout
+        );
+    }
+
+    function updateCoolDownObject(object, progress) {
+        var element = document.getElementById(object);
+        // do smthn with the progress
+        if (progress === 'finished') {
+            element.classList.remove('cooldown');
+        } else {
+            if (!element.classList.contains('cooldown')) {
+                element.classList.add('cooldown');
+            }
+        }
+    }
+
     // local event-listeners, that send or broadcast messages
     function accelerateRight() {
         airConsole.vibrate(hapticFeedback);
@@ -43,6 +84,11 @@ var GameController = function(divId, messageDispatcher, airConsole) {
     }
     function loadCannon() {
         messageDispatcher.send('loadCannon');
+        startCoolDown('loadCannon');
+    }
+    function shootCannon() {
+        messageDispatcher.send('shootCannon');
+        startCoolDown('shootCannon');
     }
     function vibrate() {
         messageDispatcher.send('vibrate');
@@ -61,14 +107,18 @@ var GameController = function(divId, messageDispatcher, airConsole) {
             '<div id="accelerateLeft" class="button">LEFT</div>' +
             '<div id="accelerateRight" class="button">RIGHT</div>' +
             '<div id="loadCannon" class="button">LOAD</div>' +
-            '<div id="fire" class="button">FIRE</div>' +
+            '<!--<div id="fire" class="button">FIRE</div>-->' +
+            '<div id="shootCannon" class="button">SHOOT</div>' +
             '<div id="vibrate" class="button">vibe</div>';
 
         // register event listener
+        //document.getElementById('fire').addEventListener('touchstart', startAction);
+        //document.getElementById('fire').addEventListener('touchend', stopAction);
         //document.getElementById('fire').addEventListener('mousedown', startAction);
-        document.getElementById('fire').addEventListener('touchstart', startAction);
         //document.getElementById('fire').addEventListener('mouseup', stopAction);
-        document.getElementById('fire').addEventListener('touchend', stopAction);
+
+        document.getElementById('shootCannon').addEventListener('touchstart', shootCannon);
+
 
         //document.getElementById('loadCannon').addEventListener('mousedown', loadCannon);
         document.getElementById('loadCannon').addEventListener('touchstart', loadCannon);

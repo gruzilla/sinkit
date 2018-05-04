@@ -15,9 +15,13 @@ body {
     display: inline-block;
 }
 
-#fire {
+#fire, #shootCannon {
     background-color: deeppink;
     border: 3px solid black;
+}
+
+#loadCannon.cooldown, #shootCannon.cooldown {
+    background-color: grey;
 }
 
 /** legacy buttons **/

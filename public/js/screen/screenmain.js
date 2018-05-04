@@ -31,6 +31,10 @@ var Screen = function(messageDispatcher, gameState, airConsole){
 
             game.updateBoat('top', {acceleration: state.teamA.acceleration});
             game.updateBoat('bottom', {acceleration: state.teamB.acceleration});
+
+            if (state.teamA.cannonLoaded && state.teamA.fireNow)
+            game.updateBoat('top', {fire: true});
+            game.updateBoat('bottom', {fire: true});
         });
 
         // initialize acceleration obstacle
