@@ -21,6 +21,10 @@
             var md = new MessageDispatcher(air_console);
 
             // link game state and messages received from clients
+            md.register('startAction', game_state.startAction);
+            md.register('stopAction', game_state.stopAction);
+
+            /* legacy +-vib game */
             md.register('increment', game_state.increment);
             md.register('decrement', game_state.decrement);
             md.register('vibrate', function vibrateClients() {
@@ -29,7 +33,7 @@
 
             // link game state changes and update of DOM
             game_state.on('update', function(state) {
-                document.getElementById('counter').innerHTML = state.counter;
+                document.getElementById('gamestate').innerHTML = JSON.stringify(state);
             });
 
             air_console.onDeviceStateChange = function(device_id, user_data) {
@@ -39,10 +43,8 @@
 
         </script>
 
-        <span id="deviceIds"></span>
-        <p>
-            <span id="counter">0</span>
-        </p>
+        <span id="deviceIds"></span><br />
+        <pre id="gamestate"></pre>
     </body>
 </html>
 

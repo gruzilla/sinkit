@@ -11,6 +11,8 @@
     <body>
 
         <div style="text-align:center;">
+            <div id="action" class="button">action</div>
+            <!-- legacy game interactions -->
             <div id="increment" class="button">+1</div>
             <div id="decrement" class="button">-1</div>
             <div id="vibrate" class="button">vibrate all</div>
@@ -29,6 +31,31 @@
                 air_console.vibrate(200);
             });
 
+            // long running actions
+            function startAction() {
+                md.send(
+                    'startAction',
+                    {
+                        action: 'supaÄktschn'
+                    }
+                );
+                return false;
+            }
+            function stopAction() {
+                md.send(
+                    'stopAction',
+                    {
+                        action: 'supaÄktschn'
+                    }
+                );
+                return false;
+            }
+            document.getElementById('action').addEventListener('mousedown', startAction);
+            document.getElementById('action').addEventListener('touchstart', startAction);
+            document.getElementById('action').addEventListener('mouseup', stopAction);
+            document.getElementById('action').addEventListener('touchend', stopAction);
+
+            /** legacy game **/
             // local event-listeners, that send or broadcast messages
             function increment() {
                 md.send('increment');
