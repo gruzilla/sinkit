@@ -10,14 +10,8 @@
     <body>
 
         <p>
-            <button id="increment">+1</button>
-            <button id="decrement">-1</button>
-        </p>
-        <p>
-            <a href="javascript:decrement()">something decremented</a>
-            <br />
-            <br />
-            <a href="javascript:increment()">something inremented</a>
+            <div id="increment" class="button">+1</div>
+            <div id="decrement" class="button">-1</div>
         </p>
 
         <script type="text/javascript">
@@ -47,6 +41,8 @@
 
             document.getElementById('increment').addEventListener('click', increment);
             document.getElementById('decrement').addEventListener('click', decrement);
+            document.getElementById('increment').addEventListener('touchstart', increment);
+            document.getElementById('decrement').addEventListener('touchstart', decrement);
         </script>
     </body>
 </html>

@@ -3,8 +3,9 @@ body {
     font-family: "Roboto", sans-serif;
 }
 
-button {
-    width: 100px;
-    height: 100px;
+.button {
+    width: 150px;
+    height: 50px;
     margin-top: 20vh;
+    display: inline-block;
 }
