@@ -25,6 +25,12 @@
             air_console.onMessage = function(from, data) {
                 
                 if(typeof data.action != "undefined"){
+                                                  
+                    // Show message on device screen
+                    var info = document.createElement('DIV');
+                    info.innerHTML = JSON.stringify(data);
+                    document.body.appendChild(info);
+                    
                     switch(data.action){
                         case "vibrate":
                             air_console.vibrate(10);
