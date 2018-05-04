@@ -1,7 +1,7 @@
 var GameState = function() {
-    var accelerationStep = 25;
-    var accelerationMin = -100;
-    var accelerationMax = 100;
+    var accelerationStep = 50;
+    var accelerationMin = -300;
+    var accelerationMax = 300;
     var accelerationTimer = null;
     var accelerationReductionInterval = 750;
 
