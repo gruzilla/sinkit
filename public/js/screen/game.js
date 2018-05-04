@@ -30,6 +30,9 @@ var SinkItScreen = function(){
     };
 
     var game = new Phaser.Game(config);
+    var mainCamera;
+    var topCamera;
+    var bottomCamera;
     
     var boatData = {
         acceleration: 0
@@ -62,13 +65,16 @@ var SinkItScreen = function(){
         //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     };
     
-    var physics;
+    var physics,gameObj;
 
     function create()
     {   
-        physics = this.physics;
+        gameObj = this; //ugly hack 1
+        physics = this.physics; //ugly hack2
         var drag = 10;
         var maxVelocity = 65;
+        mainCamera = this.cameras.add(0,0,screenWidth,screenHeight);
+        
         this.add.image(0, 0, 'water').setScale(window.innerWidth,window.innerHeight);
         
         boat.top.obj = this.physics.add.image(0,70, 'boatTop').setScale(0.4);
@@ -77,6 +83,7 @@ var SinkItScreen = function(){
         boat.top.obj.setCollideWorldBounds(true);
         boat.top.obj.setDragX(drag);
         boat.top.obj.setMaxVelocity(maxVelocity);
+        boat.top.obj.name = "top";
         
         boat.bottom.obj = this.physics.add.image(0, 0, 'boatBottom').setScale(0.4);
         boat.bottom.obj.y = window.innerHeight - boat.bottom.obj.getBounds().height*0.5-20;
@@ -85,6 +92,7 @@ var SinkItScreen = function(){
         boat.bottom.obj.setCollideWorldBounds(true);
         boat.bottom.obj.setDragX(drag);
         boat.bottom.obj.setMaxVelocity(maxVelocity);
+        boat.bottom.obj.name = "bottom";
 
     };
     
@@ -112,8 +120,9 @@ var SinkItScreen = function(){
         bullet.setCollideWorldBounds(false);
         bullet.setVelocityY(100 * inverse);
         bullet.setAccelerationY(20 * inverse);
-        bullets.push(bullet);
-        
+        physics.add.overlap(bullet, boat.bottom.obj, hitBoat, null, this);
+        physics.add.overlap(bullet, boat.top.obj, hitBoat, null, this);
+        bullets.push(bullet);       
     };
 
     function update(){
@@ -123,13 +132,23 @@ var SinkItScreen = function(){
                 bullets[i].destroy();
                 bullets.splice(i,1);
             }
+
         }
         
     };
     
+    var hitBoat = function(attacker,hitBoat){
+        if(hitBoat.name === "top"){
+            
+        } else {
+            
+        }
+        mainCamera.shake(150);
+        attacker.alpha = 0;
+    };
+    
     var shoot = function(team){
-        fireBullet(team,boat[team].obj);
-        console.log(bullets.length);
+        fireBullet(team,boat[team].obj);       
     };
     
     var updateBoat = function(team,data){
