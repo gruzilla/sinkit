@@ -136,6 +136,8 @@ var GameState = function() {
         state.teamB.shootCannon = false;
         state.teamA.cannonLoaded = false;
         state.teamB.cannonLoaded = false;
+
+        dispatch('update');
     }
 
     // not called directly, that's why the direction is 2nd arg, not data
