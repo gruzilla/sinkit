@@ -82,7 +82,7 @@ var SinkItScreen = function(){
         
         Object.keys(data).forEach(function(k){
             
-            switch(data[k]){
+            switch(k) {
                 case "acceleration":
                     boat[boat].obj.setAcceleration(data[k]);
                     break;
