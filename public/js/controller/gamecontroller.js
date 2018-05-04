@@ -110,17 +110,36 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         airConsole.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
         var playerData = JSON.parse(localStorage.getItem('playerData'));
 
-        var html = '<div id="accelerateLeft" class="button">LEFT</div>' +
-            '<div id="accelerateRight" class="button">RIGHT</div>';
+        var actionButton = '<div id="loadCannon" class="large button">LOAD</div>';
+        var teamName = playerData.team === 'A' ? 'Team Green' : 'Team Red';
+        var roleName = 'Helmnsman';
 
-        if (playerData.role === 'loader') {
-            html += '<div id="loadCannon" class="button">LOAD</div>';
-        }
         if (playerData.role === 'shooter') {
-            html += '<div id="shootCannon" class="button">SHOOT</div>';
+            actionButton = '<div id="shootCannon" class="large button">SHOOT</div>';
+            roleName = 'Cannonier';
         }
 
-        html += '<div id="vibrate" class="button">vibe</div>';
+        var html = '' +
+            '<div id="header">' +
+            '<div id="title" class="v-center">' +
+            teamName +
+            '<div class="subtitle">' +
+            roleName +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="buttons">' +
+            '<div id="accelerateLeft" class="big grad-left button"><</div>' +
+            actionButton +
+            '<div id="accelerateRight" class="big grad-right button">></div>' +
+            '</div>';
+            //'<div id="loadCannon" class="button">LOAD</div>' +
+            //'<!--<div id="fire" class="button">FIRE</div>-->' +
+            //'<div id="shootCannon" class="button">SHOOT</div>' +
+            //'<div id="vibrate" class="button">vibe</div>';
+
+
+        html += '<div id="vibrate" class="button large">vibe</div>';
 
         // '<!--<div id="fire" class="button">FIRE</div>-->' +
 
@@ -137,7 +156,6 @@ var GameController = function(divId, messageDispatcher, airConsole) {
             document.getElementById('loadCannon').addEventListener('touchstart', loadCannon);
         }
 
-        //document.getElementById('vibrate').addEventListener('touchstart', vibrate);
         document.getElementById('accelerateRight').addEventListener('touchstart', accelerateRight);
         document.getElementById('accelerateLeft').addEventListener('touchstart', accelerateLeft);
         document.getElementById('vibrate').addEventListener('touchstart', vibrate);

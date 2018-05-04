@@ -15,6 +15,7 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
             'joinTeam',
             { team: team }
         );
+
         return false;
     }
 
@@ -31,8 +32,9 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
         airConsole.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
 
         document.getElementById(divId).innerHTML = '' +
-            '<div id="teamA" class="button">Team TOP</div>' +
-            '<div id="teamB" class="button">Team BOTTOM</div>';
+            '<div id="header"><div id="title" class="v-center">Choose your team</div></div>' +
+            '<div id="teamA" class="button">Team Green</div>' +
+            '<div id="teamB" class="button">Team Red</div>';
 
         // register event listener
         document.getElementById('teamA').addEventListener('touchstart', function () { return joinTeam('A'); });
