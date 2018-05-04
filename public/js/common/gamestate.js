@@ -1,7 +1,7 @@
 var GameState = function() {
-    var accelerationStep = 10;
-    var accelerationMin = -100;
-    var accelerationMax = 100;
+    var accelerationStep = 5;
+    var accelerationMin = -75;
+    var accelerationMax = 75;
 
     var state = {
         player: {},
@@ -111,7 +111,7 @@ var GameState = function() {
     function accelerateLeft(from) {
         switch (getTeam(from)) {
             case 'A':
-                state.accelerationA = Math.min(
+                state.accelerationA = Math.max(
                     accelerationMin,
                     state.accelerationA - accelerationStep
                 );

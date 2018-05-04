@@ -29,8 +29,8 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         game_state.on('update', function(state) {
             document.getElementById('gamestate').innerHTML = JSON.stringify(state);
 
-            game.updateBoat('bottom', {acceleration: state.accelerationA});
-            game.updateBoat('top', {acceleration: state.accelerationB});
+            game.updateBoat('top', {acceleration: state.accelerationA});
+            game.updateBoat('bottom', {acceleration: state.accelerationB});
         });
     }
 
