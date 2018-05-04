@@ -5,11 +5,18 @@
  */
 
 var SinkItScreen = function(){
-  
+    
     var config = {
         type: Phaser.AUTO,
-        width: 800,
+        width: 900,
         height: 600,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 0, x: 0 },
+                debug: false
+            }
+        },
         scene: {
             preload: preload,
             create: create,
@@ -18,26 +25,46 @@ var SinkItScreen = function(){
     };
 
     var game = new Phaser.Game(config);
+    var boatTop, boatBottom;
+    
+    var inputs = {
+        move: 0
+    };
+    
+    var getDefaultInputs = function(){
+        return inputs;
+    };
+    
+    var boatTopInputs = getDefaultInputs();
+    var boatTopInputs = getDefaultInputs();
 
-    function preload ()
+    var preload = function()
     {
-        //this.load.image('sky', 'src/games/firstgame/assets/sky.png');
+        this.load.image('boat', 'assets/boat.png');
+        this.load.image('water', 'assets/water.png');
         //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-    }
+    };
 
-    function create ()
+    var create = function()
     {
-        //this.add.image(400, 300, 'sky');
-    }
+        this.add.image(0, 0, 'water').setScale(40);
+        boatBottom = this.physics.add.image(450, 0, 'boat');
+        boatBottom.setBounce(0);
+        boatBottom.setCollideWorldBounds(true);
+        
+        boatTop = this.physics.add.image(450,550, 'boat');
+        boatTop.setBounce(0);
+        boatTop.setCollideWorldBounds(true);
+    };
 
-    function update ()
+    var update = function()
     {
         
-    }
+    };
     
     
     return {
-        
+        game: game
     };
 };
 
