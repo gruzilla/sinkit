@@ -16,8 +16,8 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         md.register('startAction', gameState.startAction);
         md.register('stopAction', gameState.stopAction);
         // legacy
-        md.register('accelerateRight', gameState.accelerateRight);
-        md.register('accelerateLeft', gameState.accelerateLeft);
+        md.register('accelerate', gameState.accelerate);
+        md.register('loadCannon', gameState.loadCannon);
         md.register('vibrate', function vibrateClients() {
             md.broadcast('vibrate');
         });

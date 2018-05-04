@@ -96,6 +96,22 @@ var GameState = function() {
         dispatch('update');
     }
 
+    function loadCannon(from) {
+        var team = isNaN(from) ? from : getTeam(from);
+
+        switch (team) {
+            case 'A':
+                state.teamA.cannonLoaded = true;
+                break;
+            case 'B':
+                state.teamB.cannonLoaded = true;
+                break;
+        }
+
+        dispatch('update');
+    }
+
+    // not called directly, that's why the direction is 2nd arg, not data
     function accelerate(from, direction, step) {
         if (typeof(step) === 'undefined') {
             step = accelerationStep;
@@ -162,7 +178,7 @@ var GameState = function() {
         stopAction: stopAction,
         joinTeam: joinTeam,
         leaveGame: leaveGame,
-
+        loadCannon: loadCannon,
         accelerate: function(from, data) {
             if (!('direction' in data)) {
                 return;
