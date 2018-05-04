@@ -8,7 +8,7 @@ var GameController = function(divId, messageDispatcher, airConsole) {
     var onFinishedCallback = function() {};
     var coolDown = {
         loadCannon: false,
-        shootCannon: true,
+        shootCannon: false,
     };
     var coolDownTimeout = 1000;
     var coolDownInterval = 10;
@@ -36,7 +36,7 @@ var GameController = function(divId, messageDispatcher, airConsole) {
     }
 
     function startCoolDown(coolDownTrigger) {
-        if (!(coolDownTrigger in coolDown) || !coolDown[coolDownTrigger]) {
+        if (!(coolDownTrigger in coolDown) || coolDown[coolDownTrigger]) {
             return;
         }
 

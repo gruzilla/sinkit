@@ -20,6 +20,11 @@ body {
     border: 3px solid black;
 }
 
+#loadCannon {
+    background-color: pink;
+    border: 3px solid black;
+}
+
 #loadCannon.cooldown, #shootCannon.cooldown {
     background-color: grey;
 }
