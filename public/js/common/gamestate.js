@@ -1,14 +1,22 @@
 var GameState = function() {
-    var accelerationStep = 5;
+    var accelerationStep = 10;
     var accelerationMin = -75;
     var accelerationMax = 75;
+    var accelerationTimer = null;
+    var accelerationReductionInterval = 750;
 
     var state = {
         player: {},
-        teamA: [],
-        teamB: [],
-        accelerationA: 0,
-        accelerationB: 0
+        teamA: {
+            player: [],
+            acceleration: 0,
+            cannonLoaded: false
+        },
+        teamB: {
+            player: [],
+            acceleration: 0,
+            cannonLoaded: false
+        }
     };
 
     var listener = {};
@@ -26,8 +34,8 @@ var GameState = function() {
     }
 
     function getTeam(from) {
-        if (state.teamA.indexOf(from) > -1) return 'A';
-        if (state.teamB.indexOf(from) > -1) return 'B';
+        if (state.teamA.player.indexOf(from) > -1) return 'A';
+        if (state.teamB.player.indexOf(from) > -1) return 'B';
     }
 
     function initPlayer(from) {
@@ -65,10 +73,10 @@ var GameState = function() {
         initPlayer(from);
         state.player[from].team = data.team;
         if (data.team === 'A') {
-            state.teamA.push(from);
+            state.teamA.player.push(from);
         }
         if (data.team === 'B') {
-            state.teamB.push(from);
+            state.teamB.player.push(from);
         }
 
         dispatch('update');
@@ -77,10 +85,10 @@ var GameState = function() {
     function leaveGame(playerNumber) {
         console.log('GS change: leaveGame');
 
-        var ia = state.teamA.indexOf(playerNumber);
-        if (ia > -1) { state.teamA.splice(ia, 1); }
-        var ib = state.teamB.indexOf(playerNumber);
-        if (ib > -1) { state.teamB.splice(ib, 1); }
+        var ia = state.teamA.player.indexOf(playerNumber);
+        if (ia > -1) { state.teamA.player.splice(ia, 1); }
+        var ib = state.teamB.player.indexOf(playerNumber);
+        if (ib > -1) { state.teamB.player.splice(ib, 1); }
         if (playerNumber in state.player) {
             delete state.player[playerNumber];
         }
@@ -88,18 +96,44 @@ var GameState = function() {
         dispatch('update');
     }
 
-    function accelerateRight(from) {
-        switch (getTeam(from)) {
+    function loadCannon(from) {
+        var team = isNaN(from) ? from : getTeam(from);
+
+        switch (team) {
             case 'A':
-                state.accelerationA = Math.min(
-                    accelerationMax,
-                    state.accelerationA + accelerationStep
+                state.teamA.cannonLoaded = true;
+                break;
+            case 'B':
+                state.teamB.cannonLoaded = true;
+                break;
+        }
+
+        dispatch('update');
+    }
+
+    // not called directly, that's why the direction is 2nd arg, not data
+    function accelerate(from, direction, step) {
+        //console.debug('internal acceleration', arguments);
+        if (typeof(step) === 'undefined') {
+            step = accelerationStep;
+        }
+
+        step *= (direction >= 0 ? 1 : -1);
+        var minMax = direction >= 0 ? 'min' : 'max';
+        var accelerationCmp = direction >= 0 ? accelerationMax : accelerationMin;
+
+        var team = isNaN(from) ? from : getTeam(from);
+        switch (team) {
+            case 'A':
+                state.teamA.acceleration = Math[minMax](
+                    accelerationCmp,
+                    state.teamA.acceleration + step
                 );
                 break;
             case 'B':
-                state.accelerationB = Math.min(
-                    accelerationMax,
-                    state.accelerationB + accelerationStep
+                state.teamB.acceleration = Math[minMax](
+                    accelerationCmp,
+                    state.teamB.acceleration + step
                 );
                 break;
         }
@@ -107,23 +141,36 @@ var GameState = function() {
         dispatch('update');
     }
 
-    function accelerateLeft(from) {
-        switch (getTeam(from)) {
-            case 'A':
-                state.accelerationA = Math.max(
-                    accelerationMin,
-                    state.accelerationA - accelerationStep
-                );
-                break;
-            case 'B':
-                state.accelerationB = Math.max(
-                    accelerationMin,
-                    state.accelerationB - accelerationStep
-                );
-                break;
+    function reduceAcceleration() {
+        if (state.teamA.acceleration > 0) {
+            console.debug('reducing acceleration team A');
+            accelerate('A', -1, accelerationStep/2);
+        } else if (state.teamA.acceleration < 0) {
+            console.debug('reducing acceleration team A');
+            accelerate('A', +1, accelerationStep/2);
         }
 
-        dispatch('update');
+        if (state.teamB.acceleration > 0) {
+            console.debug('reducing acceleration team B');
+            accelerate('B', -1, accelerationStep/2);
+        } else if (state.teamB.acceleration < 0) {
+            console.debug('reducing acceleration team B');
+            accelerate('B', +1, accelerationStep/2);
+        }
+    }
+
+    function startAccelerationTimer() {
+        if (accelerationTimer != null) {
+            return;
+        }
+
+        console.debug('starting acceleration timer');
+        accelerationTimer = window.setInterval(
+            function() {
+                reduceAcceleration();
+            },
+            accelerationReductionInterval
+        );
     }
 
     return {
@@ -133,8 +180,22 @@ var GameState = function() {
         stopAction: stopAction,
         joinTeam: joinTeam,
         leaveGame: leaveGame,
+        loadCannon: loadCannon,
+        accelerate: function(from, data) {
+            //console.debug('acceleration delegator', arguments);
+            if (!('direction' in data)) {
+                return;
+            }
 
-        accelerateRight: accelerateRight,
-        accelerateLeft: accelerateLeft
+            switch (data.direction) {
+                case 'right':
+                    accelerate(from, +1);
+                    break;
+                case 'left':
+                    accelerate(from, -1);
+                    break;
+            }
+        },
+        startAccelerationTimer: startAccelerationTimer
     };
 };

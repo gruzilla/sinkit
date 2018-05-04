@@ -6,7 +6,7 @@
 
 var GameController = function(divId, messageDispatcher, airConsole) {
     var onFinishedCallback = function() {};
-    var hapticFeedback = 10;
+    var hapticFeedback = 15;
 
     /** game actions **/
     // long running actions
@@ -33,13 +33,16 @@ var GameController = function(divId, messageDispatcher, airConsole) {
     // local event-listeners, that send or broadcast messages
     function accelerateRight() {
         airConsole.vibrate(hapticFeedback);
-        messageDispatcher.send('accelerateRight');
+        messageDispatcher.send('accelerate', {direction:'right'});
         return false;
     }
     function accelerateLeft() {
         airConsole.vibrate(hapticFeedback);
-        messageDispatcher.send('accelerateLeft');
+        messageDispatcher.send('accelerate', {direction:'left'});
         return false;
+    }
+    function loadCannon() {
+        messageDispatcher.send('loadCannon');
     }
     function vibrate() {
         messageDispatcher.send('vibrate');
@@ -57,6 +60,7 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         document.getElementById(divId).innerHTML = '' +
             '<div id="accelerateLeft" class="button">LEFT</div>' +
             '<div id="accelerateRight" class="button">RIGHT</div>' +
+            '<div id="loadCannon" class="button">LOAD</div>' +
             '<div id="fire" class="button">FIRE</div>' +
             '<div id="vibrate" class="button">vibe</div>';
 
@@ -66,7 +70,9 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         //document.getElementById('fire').addEventListener('mouseup', stopAction);
         document.getElementById('fire').addEventListener('touchend', stopAction);
 
-        /** legacy games **/
+        //document.getElementById('loadCannon').addEventListener('mousedown', loadCannon);
+        document.getElementById('loadCannon').addEventListener('touchstart', loadCannon);
+
         //document.getElementById('accelerateRight').addEventListener('click', accelerateRight);
         //document.getElementById('accelerateLeft').addEventListener('click', accelerateLeft);
         //document.getElementById('vibrate').addEventListener('click', vibrate);
