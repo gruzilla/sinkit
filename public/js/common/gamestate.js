@@ -1,4 +1,8 @@
 var GameState = function() {
+    var accelerationStep = 10;
+    var accelerationMin = -100;
+    var accelerationMax = 100;
+
     var state = {
         player: {},
         teamA: [],
@@ -88,10 +92,16 @@ var GameState = function() {
     function accelerateRight(from) {
         switch (getTeam(from)) {
             case 'A':
-                state.accelerationA++;
+                state.accelerationA = Math.min(
+                    accelerationMax,
+                    state.accelerationA + accelerationStep
+                );
                 break;
             case 'B':
-                state.accelerationB++;
+                state.accelerationB = Math.min(
+                    accelerationMax,
+                    state.accelerationB + accelerationStep
+                );
                 break;
         }
 
@@ -101,10 +111,16 @@ var GameState = function() {
     function accelerateLeft(from) {
         switch (getTeam(from)) {
             case 'A':
-                state.accelerationA--;
+                state.accelerationA = Math.min(
+                    accelerationMin,
+                    state.accelerationA - accelerationStep
+                );
                 break;
             case 'B':
-                state.accelerationB--;
+                state.accelerationB = Math.max(
+                    accelerationMin,
+                    state.accelerationB - accelerationStep
+                );
                 break;
         }
 

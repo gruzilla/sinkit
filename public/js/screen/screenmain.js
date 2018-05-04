@@ -6,6 +6,8 @@
 
 var Screen = function(messageDispatcher, gameState, airConsole){
 
+    var game = new SinkItScreen(gameState, airConsole);
+
     function initialize() {
         /* messages, that will come, when players use the TeamController */
         md.register('joinTeam', game_state.joinTeam);
@@ -26,10 +28,12 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         // link game state changes and update of DOM
         game_state.on('update', function(state) {
             document.getElementById('gamestate').innerHTML = JSON.stringify(state);
+
+            game.updateBoat('bottom', {acceleration: state.accelerationA});
+            game.updateBoat('top', {acceleration: state.accelerationB});
         });
     }
 
-    var game = new SinkItScreen(gameState, airConsole);
     initialize();
 
     return {
