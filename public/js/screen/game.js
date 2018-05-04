@@ -139,10 +139,10 @@ var SinkItScreen = function(restart){
             }
 
         }
-
+        
         if(boat.bottom.data.lives == 0 && boat.bottom.obj.alpha > 0){
-            ignoreHits = true;
             boat.bottom.obj.alpha -= 0.007;
+            boat.bottom.obj.angle *= 1.04;
             boatScale *= 0.995;
             boatScale = Math.max(0,boatScale);
             boat.bottom.obj.setScale(boatScale);
@@ -153,10 +153,10 @@ var SinkItScreen = function(restart){
         }
         
         if(boat.top.data.lives == 0 && boat.top.obj.alpha > 0){
-            ignoreHits = true;
             boat.top.obj.alpha -= 0.007;
             boatScale *= 0.995;
             boatScale = Math.max(0,boatScale);
+            boat.top.obj.angle *= 1.04;
             boat.top.obj.setScale(boatScale);
         } else if(boat.top.data.lives == 0 && boat.top.obj.alpha <= 0){
             stopUpdate = true;
@@ -167,10 +167,13 @@ var SinkItScreen = function(restart){
     };
     
     var hitBoat = function(attacker,hitBoat){
-        if(ignoreHits) return false;
-        var lives = boat[hitBoat.name].data.lives--;
-        if(lives == 0){
+        if(ignoreHits) return true;
+        boat[hitBoat.name].data.lives--;
+        var lives = boat[hitBoat.name].data.lives;
 
+        if(lives == 0){
+            hitBoat.angle = 1;
+            ignoreHits = true;
         }
         mainCamera.shake(150);
         attacker.alpha = 0;
