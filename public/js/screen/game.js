@@ -35,7 +35,8 @@ var SinkItScreen = function(){
     var bottomCamera;
     
     var boatData = {
-        acceleration: 0
+        acceleration: 0,
+        lives: 1
     };
     
     var getDefaultData = function(){
@@ -138,10 +139,9 @@ var SinkItScreen = function(){
     };
     
     var hitBoat = function(attacker,hitBoat){
-        if(hitBoat.name === "top"){
-            
-        } else {
-            
+        var lives = boat[hitBoat.name].data.lives--;
+        if(lives == 0){
+            alert("gameover");
         }
         mainCamera.shake(150);
         attacker.alpha = 0;
