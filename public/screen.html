@@ -24,6 +24,11 @@
             }
 
             document.getElementById('counter').innerHTML = myCounter;
+            air_console.broadcast({
+               data: {
+                   action: "vibrate"
+               } 
+            });
 
             /*
             // We receive a message -> Send message back to the device

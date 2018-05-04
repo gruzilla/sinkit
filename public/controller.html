@@ -19,14 +19,20 @@
 
             // Send a message to the screen
             air_console.message(AirConsole.SCREEN, "How are you?");
+            air_console.setDeviceOrientation(AirConsole.ORIENTATION_LANDSCAPE);
 
             // Listen for messages
             air_console.onMessage = function(from, data) {
-
-                // Show message on device screen
-                var info = document.createElement('DIV');
-                info.innerHTML = data;
-                document.body.appendChild(info);
+                
+                if(typeof data.action != "undefined"){
+                    switch(data.action){
+                        case "vibrate":
+                            air_console.vibrate(10);
+                            break;
+                        default:
+                    }
+                }
+                
             };
 
             function increment() {
