@@ -27,6 +27,9 @@
             // link game state and messages received from clients
             md.register('increment', game_state.increment);
             md.register('decrement', game_state.decrement);
+            md.register('vibrate', function vibrateClients() {
+                md.broadcast('vibrate');
+            });
 
             // link game state changes and update of DOM
             game_state.on('update', function(state) {
@@ -38,13 +41,6 @@
                 document.getElementById('deviceIds').innerHTML = JSON.stringify([ids, user_data]);
             };
 
-            // init local event listener for testing
-            function vibrateClients() {
-                md.broadcast('vibrate');
-            }
-
-            document.getElementById('vibrateAll').addEventListener('click', vibrateClients);
-            document.getElementById('vibrateAll').addEventListener('touchstart', vibrateClients);
         </script>
 
         <span id="deviceIds"></span>

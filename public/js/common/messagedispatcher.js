@@ -28,6 +28,10 @@ var MessageDispatcher = function(air_console){
     }
 
     function broadcast(messageName, data) {
+        if (broadcastDebounce !== false) {
+            return;
+        }
+
         broadcastDebounce = setTimeout(function(){
             console.log("broadcasting message " + messageName);
             air_console.broadcast(

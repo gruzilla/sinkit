@@ -20,3 +20,8 @@ body {
     background-color: red;
     border: 3px solid black;
 }
+
+#vibrate {
+    background-color: orange;
+    border: 3px solid black;
+}
