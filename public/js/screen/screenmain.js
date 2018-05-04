@@ -8,13 +8,17 @@ var Screen = function(messageDispatcher, gameState, airConsole){
 
     var game;
 
+    var victory = function(team){
+        
+    };
+
     var restart = function(){
         delete game;
         document.getElementById("game").innerHTML = "";
         game = new SinkItScreen(restart);
     };
 
-    game = new SinkItScreen(restart);
+    game = new SinkItScreen(restart,victory);
 
     function initialize() {
         /* messages, that will come, when players use the TeamController */
