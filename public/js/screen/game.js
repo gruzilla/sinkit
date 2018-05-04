@@ -25,18 +25,25 @@ var SinkItScreen = function(){
     };
 
     var game = new Phaser.Game(config);
-    var boatTop, boatBottom;
     
     var inputs = {
-        move: 0
+        acceleration: 0
     };
     
     var getDefaultInputs = function(){
         return inputs;
     };
     
-    var boatTopInputs = getDefaultInputs();
-    var boatBottomInputs = getDefaultInputs();
+    var boat = {
+        top: {
+            obj: null,
+            inputs: getDefaultInputs()
+        },
+        bottom: {
+            obj: null,
+            inputs: getDefaultInputs()
+        }
+    };
 
     function preload()
     {
@@ -48,18 +55,24 @@ var SinkItScreen = function(){
     function create()
     {
         this.add.image(0, 0, 'water').setScale(40);
-        boatBottom = this.physics.add.image(450, 0, 'boat');
-        boatBottom.setBounce(0);
-        boatBottom.setCollideWorldBounds(true);
         
-        boatTop = this.physics.add.image(450,550, 'boat');
-        boatTop.setBounce(0);
-        boatTop.setCollideWorldBounds(true);
+        boat.bottom.obj = this.physics.add.image(450, 550, 'boat');
+        boat.bottom.obj.setBounce(0);
+        boat.bottom.obj.setCollideWorldBounds(true);
+        
+        boat.top.obj = this.physics.add.image(450,0, 'boat');
+        boat.top.obj.setBounce(0);
+        boat.top.obj.setCollideWorldBounds(true);
     };
 
     function update()
     {
-        boatBottom.setVelocityX(100);
+        
+    };
+    
+    
+    var updateBoats = function(boat,value){
+        
     };
     
     
