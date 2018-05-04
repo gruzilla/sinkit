@@ -7,6 +7,8 @@
 var SinkItScreen = function(){
     var drag = 20;
     var maxVelocity = 100;
+    var boatLives = 1;
+    var boatScale = 0.4;
 
     var screenWidth = window.innerWidth;
     var screenHeight = window.innerHeight;
@@ -36,23 +38,20 @@ var SinkItScreen = function(){
     var topCamera;
     var bottomCamera;
     
-    var boatData = {
-        acceleration: 0,
-        lives: 1
-    };
-    
-    var getDefaultData = function(){
-        return boatData;
-    };
-    
     var boat = {
         top: {
             obj: null,
-            data: getDefaultData()
+            data: {
+                acceleration: 0,
+                lives: boatLives
+            }
         },
         bottom: {
             obj: null,
-            data: getDefaultData()
+            data: {
+                acceleration: 0,
+                lives: boatLives
+            }
         }
     };
     
@@ -78,7 +77,7 @@ var SinkItScreen = function(){
         
         this.add.image(0, 0, 'water').setScale(window.innerWidth,window.innerHeight);
         
-        boat.top.obj = this.physics.add.image(0,70, 'boatTop').setScale(0.4);
+        boat.top.obj = this.physics.add.image(0,70, 'boatTop').setScale(boatScale);
         boat.top.obj.x = Math.max(40, boat.top.obj.getBounds().width*0.5 + Math.random() * (window.innerWidth - boat.top.obj.getBounds().width) - 40);
         boat.top.obj.setBounce(0);
         boat.top.obj.setCollideWorldBounds(true);
@@ -86,7 +85,7 @@ var SinkItScreen = function(){
         boat.top.obj.setMaxVelocity(maxVelocity);
         boat.top.obj.name = "top";
         
-        boat.bottom.obj = this.physics.add.image(0, 0, 'boatBottom').setScale(0.4);
+        boat.bottom.obj = this.physics.add.image(0, 0, 'boatBottom').setScale(boatScale);
         boat.bottom.obj.y = window.innerHeight - boat.bottom.obj.getBounds().height*0.5-20;
         boat.bottom.obj.x = Math.max(40, boat.bottom.obj.getBounds().width*0.5 + Math.random() * (window.innerWidth - boat.top.obj.getBounds().width) - 40);
         boat.bottom.obj.setBounce(0);
@@ -135,20 +134,36 @@ var SinkItScreen = function(){
             }
 
         }
+
+        if(boat.bottom.data.lives == 0 && boat.bottom.obj.alpha > 0){
+            boat.bottom.obj.alpha -= 0.007;
+            boatScale *= 0.995;
+            boatScale = Math.max(0,boatScale);
+            boat.bottom.obj.setScale(boatScale);
+        }
+        
+        if(boat.top.data.lives == 0 && boat.top.obj.alpha > 0){
+            boat.top.obj.alpha -= 0.007;
+            boatScale *= 0.995;
+            boatScale = Math.max(0,boatScale);
+            boat.top.obj.setScale(boatScale);
+        }
         
     };
     
     var hitBoat = function(attacker,hitBoat){
         var lives = boat[hitBoat.name].data.lives--;
         if(lives == 0){
-            alert("gameover");
+
         }
         mainCamera.shake(150);
         attacker.alpha = 0;
+        attacker.disableBody(true, true);
     };
     
     var shoot = function(team){
-        fireBullet(team,boat[team].obj);       
+        fireBullet(team,boat[team].obj);  
+        console.log(boat.bottom.obj.body);
     };
     
     var updateBoat = function(team,data){
