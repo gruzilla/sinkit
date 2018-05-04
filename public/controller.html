@@ -8,6 +8,10 @@
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
+
+        <button id="increment">+1</button>
+        <button id="decrement">-1</button>
+
         <script type="text/javascript">
             var air_console = new AirConsole();
 
@@ -30,10 +34,10 @@
             function decrement() {
                 air_console.message(AirConsole.SCREEN, "-1");
             }
-        </script>
 
-        <button id="increment">+1</button>
-        <button id="decrement">-1</button>
+            document.getElementById('increment').addEventListener('click', increment);
+            document.getElementById('decrement').addEventListener('click', decrement);
+        </script>
     </body>
 </html>
 
