@@ -8,8 +8,10 @@ var SinkItScreen = function(){
     
     var config = {
         type: Phaser.AUTO,
-        width: 900,
-        height: 600,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        parent: "game",
+        zoom: 1,
         physics: {
             default: 'arcade',
             arcade: {
@@ -47,20 +49,23 @@ var SinkItScreen = function(){
 
     function preload()
     {
-        this.load.image('boat', 'assets/boat.png');
+                        
+        this.load.image('boatBottom', 'assets/boat-red.png');
+        this.load.image('boatTop', 'assets/boat-green.png');
         this.load.image('water', 'assets/water.png');
         //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     };
 
     function create()
-    {
-        this.add.image(0, 0, 'water').setScale(40);
+    {   
         
-        boat.bottom.obj = this.physics.add.image(450, 550, 'boat');
+        this.add.image(0, 0, 'water').setScale(window.innerWidth,window.innerHeight);
+        
+        boat.bottom.obj = this.physics.add.image(450, 550, 'boatBottom').setScale(0.4);
         boat.bottom.obj.setBounce(0);
         boat.bottom.obj.setCollideWorldBounds(true);
         
-        boat.top.obj = this.physics.add.image(450,0, 'boat');
+        boat.top.obj = this.physics.add.image(450,0, 'boatTop').setScale(0.4);
         boat.top.obj.setBounce(0);
         boat.top.obj.setCollideWorldBounds(true);
     };
