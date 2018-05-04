@@ -28,6 +28,7 @@
             
             if(!broadcast){
                 broadcast = setTimeout(function(){
+                    console.log("sending broadcast");
                     air_console.broadcast({
                         data: {
                             action: "vibrate"
