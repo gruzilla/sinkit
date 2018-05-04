@@ -7,10 +7,16 @@ var GameState = function() {
 
     var state = {
         player: {},
-        teamA: [],
-        teamB: [],
-        accelerationA: 0,
-        accelerationB: 0
+        teamA: {
+            player: [],
+            acceleration: 0,
+            cannonLoaded: false
+        },
+        teamB: {
+            player: [],
+            acceleration: 0,
+            cannonLoaded: false
+        }
     };
 
     var listener = {};
@@ -28,8 +34,8 @@ var GameState = function() {
     }
 
     function getTeam(from) {
-        if (state.teamA.indexOf(from) > -1) return 'A';
-        if (state.teamB.indexOf(from) > -1) return 'B';
+        if (state.teamA.player.indexOf(from) > -1) return 'A';
+        if (state.teamB.player.indexOf(from) > -1) return 'B';
     }
 
     function initPlayer(from) {
@@ -67,10 +73,10 @@ var GameState = function() {
         initPlayer(from);
         state.player[from].team = data.team;
         if (data.team === 'A') {
-            state.teamA.push(from);
+            state.teamA.player.push(from);
         }
         if (data.team === 'B') {
-            state.teamB.push(from);
+            state.teamB.player.push(from);
         }
 
         dispatch('update');
@@ -79,10 +85,10 @@ var GameState = function() {
     function leaveGame(playerNumber) {
         console.log('GS change: leaveGame');
 
-        var ia = state.teamA.indexOf(playerNumber);
-        if (ia > -1) { state.teamA.splice(ia, 1); }
-        var ib = state.teamB.indexOf(playerNumber);
-        if (ib > -1) { state.teamB.splice(ib, 1); }
+        var ia = state.teamA.player.indexOf(playerNumber);
+        if (ia > -1) { state.teamA.player.splice(ia, 1); }
+        var ib = state.teamB.player.indexOf(playerNumber);
+        if (ib > -1) { state.teamB.player.splice(ib, 1); }
         if (playerNumber in state.player) {
             delete state.player[playerNumber];
         }
@@ -98,15 +104,15 @@ var GameState = function() {
         var team = isNaN(from) ? from : getTeam(from);
         switch (team) {
             case 'A':
-                state.accelerationA = Math.min(
+                state.teamA.acceleration = Math.min(
                     accelerationMax,
-                    state.accelerationA + step
+                    state.teamA.acceleration + step
                 );
                 break;
             case 'B':
-                state.accelerationB = Math.min(
+                state.teamB.acceleration = Math.min(
                     accelerationMax,
-                    state.accelerationB + step
+                    state.teamB.acceleration + step
                 );
                 break;
         }
@@ -122,15 +128,15 @@ var GameState = function() {
         var team = isNaN(from) ? from : getTeam(from);
         switch (team) {
             case 'A':
-                state.accelerationA = Math.max(
+                state.teamA.acceleration = Math.max(
                     accelerationMin,
-                    state.accelerationA - step
+                    state.teamA.acceleration - step
                 );
                 break;
             case 'B':
-                state.accelerationB = Math.max(
+                state.teamB.acceleration = Math.max(
                     accelerationMin,
-                    state.accelerationB - step
+                    state.teamB.acceleration - step
                 );
                 break;
         }
@@ -139,18 +145,18 @@ var GameState = function() {
     }
 
     function reduceAcceleration() {
-        if (state.accelerationA > 0) {
+        if (state.teamA.acceleration > 0) {
             console.debug('reducing acceleration team A');
             accelerateLeft('A', accelerationStep/2);
-        } else if (state.accelerationA < 0) {
+        } else if (state.teamA.acceleration < 0) {
             console.debug('reducing acceleration team A');
             accelerateRight('A', accelerationStep/2);
         }
 
-        if (state.accelerationB > 0) {
+        if (state.teamB.acceleration > 0) {
             console.debug('reducing acceleration team B');
             accelerateLeft('B', accelerationStep/2);
-        } else if (state.accelerationB < 0) {
+        } else if (state.teamB.acceleration < 0) {
             console.debug('reducing acceleration team B');
             accelerateRight('B', accelerationStep/2);
         }

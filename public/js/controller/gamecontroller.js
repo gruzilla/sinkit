@@ -6,7 +6,7 @@
 
 var GameController = function(divId, messageDispatcher, airConsole) {
     var onFinishedCallback = function() {};
-    var hapticFeedback = 10;
+    var hapticFeedback = 15;
 
     /** game actions **/
     // long running actions
