@@ -4,7 +4,8 @@
         <title>SinkIt - Screen</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.7.0.js"></script> 
+        <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.7.0.js"></script>
+        <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
         <script type="text/javascript">
@@ -25,11 +26,12 @@
 
         air_console.onDeviceStateChange = function(device_id, user_data) {
             var ids = air_console.getControllerDeviceIds();
-            document.getElementById('deviceIds').innerHTML = JSON.stringify(ids);
+            document.getElementById('deviceIds').innerHTML = JSON.stringify([ids, user_data]);
         }
 
         </script>
 
+        <span id="deviceIds"></span>
         <span id="deviceIds"></span>
     </body>
 </html>
