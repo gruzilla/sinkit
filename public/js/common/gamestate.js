@@ -88,7 +88,6 @@ var GameState = function() {
         dispatch('update');
     }
 
-    /* legacy +- game */
     function accelerateRight(from) {
         switch (getTeam(from)) {
             case 'A':
