@@ -161,12 +161,18 @@ var GameState = function() {
         var team = isNaN(from) ? from : getTeam(from);
         switch (team) {
             case 'A':
+                if (state.teamA.acceleration < 0 && direction > 0 || state.teamA.acceleration > 0 && direction < 0) {
+                    state.teamA.acceleration = 0;
+                }
                 state.teamA.acceleration = Math[minMax](
                     accelerationCmp,
                     state.teamA.acceleration + step
                 );
                 break;
             case 'B':
+                if (state.teamB.acceleration < 0 && direction > 0 || state.teamB.acceleration > 0 && direction < 0) {
+                    state.teamB.acceleration = 0;
+                }
                 state.teamB.acceleration = Math[minMax](
                     accelerationCmp,
                     state.teamB.acceleration + step
