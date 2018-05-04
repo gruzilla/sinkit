@@ -59,6 +59,7 @@ var SinkItScreen = function(){
     function create()
     {   
         var drag = 10;
+        var maxVelocity = 65;
         this.add.image(0, 0, 'water').setScale(window.innerWidth,window.innerHeight);
         
         boat.top.obj = this.physics.add.image(0,70, 'boatTop').setScale(0.4);
@@ -66,6 +67,7 @@ var SinkItScreen = function(){
         boat.top.obj.setBounce(0);
         boat.top.obj.setCollideWorldBounds(true);
         boat.top.obj.setDragX(drag);
+        boat.top.obj.setMaxVelocity(maxVelocity);
         
         boat.bottom.obj = this.physics.add.image(0, 0, 'boatBottom').setScale(0.4);
         boat.bottom.obj.y = window.innerHeight - boat.bottom.obj.getBounds().height*0.5-20;
@@ -73,13 +75,13 @@ var SinkItScreen = function(){
         boat.bottom.obj.setBounce(0);
         boat.bottom.obj.setCollideWorldBounds(true);
         boat.bottom.obj.setDragX(drag);
+        boat.bottom.obj.setMaxVelocity(maxVelocity);
 
-        
     };
 
     function update()
     {
-        
+
     };    
     
     var updateBoat = function(team,data){
@@ -89,6 +91,7 @@ var SinkItScreen = function(){
             switch(k) {
                 case "acceleration":
                     boat[team].obj.setAccelerationX(data[k]);
+                    console.log(boat[team].obj.body.velocity);
                     break;
                 default:
                     console.log(k,data[k]);
@@ -97,6 +100,7 @@ var SinkItScreen = function(){
         });
         
     };
+
     
     
     return {
