@@ -3,7 +3,9 @@ var GameState = function() {
         counter: 0,
         player: {},
         teamA: [],
-        teamB: []
+        teamB: [],
+        accelerationA: 0,
+        accelerationB: 0
     };
 
     var listener = {};
@@ -17,8 +19,12 @@ var GameState = function() {
     }
 
     function on(type, callback) {
-        state.counter = 1;
         listener[type] = callback.bind(this);
+    }
+
+    function getTeam(from) {
+        if (state.teamA.indexOf(from) > -1) return 'A';
+        if (state.teamB.indexOf(from) > -1) return 'B';
     }
 
     function initPlayer(from) {
@@ -33,6 +39,8 @@ var GameState = function() {
     }
 
     function startAction(from, data) {
+        console.log('GS change: startAction');
+
         initPlayer(from);
         state.player[from].actions[data.action] = true;
 
@@ -40,6 +48,8 @@ var GameState = function() {
     }
 
     function stopAction(from, data) {
+        console.log('GS change: stopAction');
+
         initPlayer(from);
         delete state.player[from].actions[data.action];
 
@@ -47,6 +57,8 @@ var GameState = function() {
     }
 
     function joinTeam(from, data) {
+        console.log('GS change: joinTeam');
+
         initPlayer(from);
         state.player[from].team = data.team;
         if (data.team === 'A') {
@@ -60,6 +72,8 @@ var GameState = function() {
     }
 
     function leaveGame(playerNumber) {
+        console.log('GS change: leaveGame');
+
         var ia = state.teamA.indexOf(playerNumber);
         if (ia > -1) { state.teamA.splice(ia, 1); }
         var ib = state.teamB.indexOf(playerNumber);
@@ -72,14 +86,28 @@ var GameState = function() {
     }
 
     /* legacy +- game */
-    function increment() {
-        state.counter++;
+    function accelerateRight(from) {
+        switch (getTeam(from)) {
+            case 'A':
+                state.accelerationA++;
+                break;
+            case 'B':
+                state.accelerationB++;
+                break;
+        }
 
         dispatch('update');
     }
 
-    function decrement() {
-        state.counter--;
+    function accelerateLeft(from) {
+        switch (getTeam(from)) {
+            case 'A':
+                state.accelerationA--;
+                break;
+            case 'B':
+                state.accelerationB--;
+                break;
+        }
 
         dispatch('update');
     }
@@ -92,8 +120,7 @@ var GameState = function() {
         joinTeam: joinTeam,
         leaveGame: leaveGame,
 
-        /* legacy game */
-        increment: increment,
-        decrement: decrement
+        accelerateRight: accelerateRight,
+        accelerateLeft: accelerateLeft
     };
 };

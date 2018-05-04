@@ -12,14 +12,14 @@ var GameController = function(divId, messageDispatcher, airConsole) {
     function startAction() {
         messageDispatcher.send(
             'startAction',
-            { action: 'supaÄktschn' }
+            { action: 'fire' }
         );
         return false;
     }
     function stopAction() {
         messageDispatcher.send(
             'stopAction',
-            { action: 'supaÄktschn' }
+            { action: 'fire' }
         );
         return false;
     }
@@ -30,12 +30,12 @@ var GameController = function(divId, messageDispatcher, airConsole) {
 
     /** legacy game **/
     // local event-listeners, that send or broadcast messages
-    function increment() {
-        messageDispatcher.send('increment');
+    function accelerateRight() {
+        messageDispatcher.send('accelerateRight');
         return false;
     }
-    function decrement() {
-        messageDispatcher.send('decrement');
+    function accelerateLeft() {
+        messageDispatcher.send('accelerateLeft');
         return false;
     }
     function vibrate() {
@@ -52,23 +52,23 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         airConsole.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
 
         document.getElementById(divId).innerHTML = '' +
-            '<div id="action" class="button">action</div>' +
-            '<div id="increment" class="button">+1</div>' +
-            '<div id="decrement" class="button">-1</div>' +
-            '<div id="vibrate" class="button">vibrate all</div>';
+            '<div id="accelerateLeft" class="button">LEFT</div>' +
+            '<div id="accelerateRight" class="button">RIGHT</div>' +
+            '<div id="fire" class="button">FIRE</div>' +
+            '<div id="vibrate" class="button">vibe</div>';
 
         // register event listener
-        document.getElementById('action').addEventListener('mousedown', startAction);
-        document.getElementById('action').addEventListener('touchstart', startAction);
-        document.getElementById('action').addEventListener('mouseup', stopAction);
-        document.getElementById('action').addEventListener('touchend', stopAction);
+        document.getElementById('fire').addEventListener('mousedown', startAction);
+        document.getElementById('fire').addEventListener('touchstart', startAction);
+        document.getElementById('fire').addEventListener('mouseup', stopAction);
+        document.getElementById('fire').addEventListener('touchend', stopAction);
 
         /** legacy games **/
-        document.getElementById('increment').addEventListener('click', increment);
-        document.getElementById('decrement').addEventListener('click', decrement);
+        document.getElementById('accelerateRight').addEventListener('click', accelerateRight);
+        document.getElementById('accelerateLeft').addEventListener('click', accelerateLeft);
         document.getElementById('vibrate').addEventListener('click', vibrate);
-        document.getElementById('increment').addEventListener('touchstart', increment);
-        document.getElementById('decrement').addEventListener('touchstart', decrement);
+        document.getElementById('accelerateRight').addEventListener('touchstart', accelerateRight);
+        document.getElementById('accelerateLeft').addEventListener('touchstart', accelerateLeft);
         document.getElementById('vibrate').addEventListener('touchstart', vibrate);
 
         // message handler registration
