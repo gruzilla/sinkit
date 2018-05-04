@@ -128,18 +128,16 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         // register event listener
         //document.getElementById('fire').addEventListener('touchstart', startAction);
         //document.getElementById('fire').addEventListener('touchend', stopAction);
-        //document.getElementById('fire').addEventListener('mousedown', startAction);
-        //document.getElementById('fire').addEventListener('mouseup', stopAction);
 
-        document.getElementById('shootCannon').addEventListener('touchstart', shootCannon);
+        if (playerData.role === 'shooter') {
+            document.getElementById('shootCannon').addEventListener('touchstart', shootCannon);
+        }
 
+        if (playerData.role === 'loader') {
+            document.getElementById('loadCannon').addEventListener('touchstart', loadCannon);
+        }
 
-        //document.getElementById('loadCannon').addEventListener('mousedown', loadCannon);
-        document.getElementById('loadCannon').addEventListener('touchstart', loadCannon);
-
-        //document.getElementById('accelerateRight').addEventListener('click', accelerateRight);
-        //document.getElementById('accelerateLeft').addEventListener('click', accelerateLeft);
-        //document.getElementById('vibrate').addEventListener('click', vibrate);
+        //document.getElementById('vibrate').addEventListener('touchstart', vibrate);
         document.getElementById('accelerateRight').addEventListener('touchstart', accelerateRight);
         document.getElementById('accelerateLeft').addEventListener('touchstart', accelerateLeft);
         document.getElementById('vibrate').addEventListener('touchstart', vibrate);

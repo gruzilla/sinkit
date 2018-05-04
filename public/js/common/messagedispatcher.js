@@ -14,7 +14,7 @@ var MessageDispatcher = function(air_console){
         if (typeof(to) === 'undefined') {
             to = AirConsole.SCREEN;
         }
-        console.log("sending message " + messageName +" to screen");
+        console.log('sending message ' + messageName + ' to ' + to);
         air_console.message(
             to,
             {
@@ -64,6 +64,7 @@ var MessageDispatcher = function(air_console){
             return;
         }
 
+        console.debug('received message ' + data.name + ' from ' + from);
         messageCallbacks[data.name](from, data.data);
     };
 

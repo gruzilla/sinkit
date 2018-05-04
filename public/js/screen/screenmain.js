@@ -49,8 +49,8 @@ var Screen = function(messageDispatcher, gameState, airConsole){
             }
         });
 
-        gameState.on('updatePlayer', function(player, data) {
-            md.send('updatePlayer', data, player);
+        gameState.on('playerChosen', function(data) {
+            md.send('playerUpdate', data.data, data.id);
         });
 
         // initialize acceleration obstacle
