@@ -60,12 +60,15 @@ var SinkItScreen = function(){
     {   
         
         this.add.image(0, 0, 'water').setScale(window.innerWidth,window.innerHeight);
-        
-        boat.bottom.obj = this.physics.add.image(450, 550, 'boatBottom').setScale(0.4);
+        boat.bottom.obj = this.physics.add.image(0, 0, 'boatBottom').setScale(0.4);
+        boat.bottom.obj.y = window.innerHeight - boat.bottom.obj.getBounds().height*0.5-20;
+        boat.bottom.obj.x = 40 + boat.bottom.obj.getBounds().width*0.5 + Math.random()*window.innerWidth - boat.bottom.obj.getBounds().width;
+        console.log(boat.bottom.obj);
         boat.bottom.obj.setBounce(0);
         boat.bottom.obj.setCollideWorldBounds(true);
         
-        boat.top.obj = this.physics.add.image(450,0, 'boatTop').setScale(0.4);
+        boat.top.obj = this.physics.add.image(0,70, 'boatTop').setScale(0.4);
+        boat.top.obj.x = 40 + boat.top.obj.getBounds().width*0.5 + Math.random()*window.innerWidth - boat.top.obj.getBounds().width;
         boat.top.obj.setBounce(0);
         boat.top.obj.setCollideWorldBounds(true);
     };
@@ -73,10 +76,21 @@ var SinkItScreen = function(){
     function update()
     {
         
-    };
+    };    
     
-    
-    var updateBoat = function(boat,value){
+    var updateBoat = function(boat,data){
+        
+        Object.keys(data).forEach(function(k){
+            
+            switch(data[k]){
+                case "acceleration":
+                    boat[boat].obj.setAcceleration(boat[boat].obj.getAcceleration()+data[k]);
+                    break;
+                default:
+                    console.log(k,data[k]);
+            }
+            
+        });
         
     };
     
