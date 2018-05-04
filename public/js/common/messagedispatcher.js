@@ -1,6 +1,7 @@
 var MessageDispatcher = function(air_console){
 
-    var debounceTimeout = 250;
+    var broadCastTimeout = 250;
+    var sendTimeout = 100;
     var messageCallbacks = {};
     var sendDebounce = false;
     var broadcastDebounce = false;
@@ -9,22 +10,26 @@ var MessageDispatcher = function(air_console){
         messageCallbacks[messageName] = callback;
     }
 
-    function send(messageName, data) {
+    function send(messageName, data){
+        console.log("sending message " + messageName +" to screen");
+        air_console.message(
+            AirConsole.SCREEN,
+            {
+                name: messageName,
+                data: data
+            }
+        );
+    }
+
+    function sendDebounced(messageName, data) {
         if (sendDebounce !== false) {
             return;
         }
 
-        sendDebounce = setTimeout(function(){
-            console.log("sending message " + messageName +" to screen");
-            air_console.message(
-                AirConsole.SCREEN,
-                {
-                    name: messageName,
-                    data: data
-                }
-            );
+        sendDebounce = setTimeout(function() {
+            send(messageName, data);
             sendDebounce = false;
-        }, debounceTimeout);
+        }, sendTimeout);
     }
 
     function broadcast(messageName, data) {
@@ -41,7 +46,7 @@ var MessageDispatcher = function(air_console){
                 }
             );
             broadcastDebounce = false;
-        }, debounceTimeout);
+        }, broadCastTimeout);
     }
 
     // Listen for messages
@@ -62,6 +67,7 @@ var MessageDispatcher = function(air_console){
     return {
         register: register,
         send: send,
+        sendDebounced: sendDebounced,
         broadcast: broadcast
     };
 
