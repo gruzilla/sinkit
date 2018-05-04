@@ -15,7 +15,6 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
             'joinTeam',
             { team: team }
         );
-        onFinishedCallback();
         return false;
     }
 
@@ -48,6 +47,7 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
         }
 
         localStorage.setItem('playerData', JSON.stringify(data));
+        onFinishedCallback();
     });
 
     function update () {
