@@ -96,47 +96,26 @@ var GameState = function() {
         dispatch('update');
     }
 
-    function accelerateRight(from, step) {
+    function accelerate(from, direction, step) {
         if (typeof(step) === 'undefined') {
             step = accelerationStep;
         }
 
+        step *= (direction >= 0 ? 1 : -1);
+        var minMax = direction >= 0 ? 'min' : 'max';
+
         var team = isNaN(from) ? from : getTeam(from);
         switch (team) {
             case 'A':
-                state.teamA.acceleration = Math.min(
+                state.teamA.acceleration = Math[minMax](
                     accelerationMax,
                     state.teamA.acceleration + step
                 );
                 break;
             case 'B':
-                state.teamB.acceleration = Math.min(
+                state.teamB.acceleration = Math[minMax](
                     accelerationMax,
                     state.teamB.acceleration + step
-                );
-                break;
-        }
-
-        dispatch('update');
-    }
-
-    function accelerateLeft(from, step) {
-        if (typeof(step) === 'undefined') {
-            step = accelerationStep;
-        }
-
-        var team = isNaN(from) ? from : getTeam(from);
-        switch (team) {
-            case 'A':
-                state.teamA.acceleration = Math.max(
-                    accelerationMin,
-                    state.teamA.acceleration - step
-                );
-                break;
-            case 'B':
-                state.teamB.acceleration = Math.max(
-                    accelerationMin,
-                    state.teamB.acceleration - step
                 );
                 break;
         }
@@ -147,18 +126,18 @@ var GameState = function() {
     function reduceAcceleration() {
         if (state.teamA.acceleration > 0) {
             console.debug('reducing acceleration team A');
-            accelerateLeft('A', accelerationStep/2);
+            accelerate('A', -1, accelerationStep/2);
         } else if (state.teamA.acceleration < 0) {
             console.debug('reducing acceleration team A');
-            accelerateRight('A', accelerationStep/2);
+            accelerate('A', +1, accelerationStep/2);
         }
 
         if (state.teamB.acceleration > 0) {
             console.debug('reducing acceleration team B');
-            accelerateLeft('B', accelerationStep/2);
+            accelerate('B', -1, accelerationStep/2);
         } else if (state.teamB.acceleration < 0) {
             console.debug('reducing acceleration team B');
-            accelerateRight('B', accelerationStep/2);
+            accelerate('B', +1, accelerationStep/2);
         }
     }
 
@@ -184,8 +163,20 @@ var GameState = function() {
         joinTeam: joinTeam,
         leaveGame: leaveGame,
 
-        accelerateRight: accelerateRight,
-        accelerateLeft: accelerateLeft,
+        accelerate: function(from, data) {
+            if (!('direction' in data)) {
+                return;
+            }
+
+            switch (data.direction) {
+                case 'right':
+                    accelerate(from, +1);
+                    break;
+                case 'left':
+                    accelerate(from, -1);
+                    break;
+            }
+        },
         startAccelerationTimer: startAccelerationTimer
     };
 };

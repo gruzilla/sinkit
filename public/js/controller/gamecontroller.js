@@ -33,12 +33,12 @@ var GameController = function(divId, messageDispatcher, airConsole) {
     // local event-listeners, that send or broadcast messages
     function accelerateRight() {
         airConsole.vibrate(hapticFeedback);
-        messageDispatcher.send('accelerateRight');
+        messageDispatcher.send('accelerate', {direction:'right'});
         return false;
     }
     function accelerateLeft() {
         airConsole.vibrate(hapticFeedback);
-        messageDispatcher.send('accelerateLeft');
+        messageDispatcher.send('accelerate', {direction:'left'});
         return false;
     }
     function vibrate() {
