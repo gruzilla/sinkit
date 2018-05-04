@@ -10,10 +10,13 @@ var MessageDispatcher = function(air_console){
         messageCallbacks[messageName] = callback;
     }
 
-    function send(messageName, data){
+    function send(messageName, data, to){
+        if (typeof(to) === 'undefined') {
+            to = AirConsole.SCREEN;
+        }
         console.log("sending message " + messageName +" to screen");
         air_console.message(
-            AirConsole.SCREEN,
+            to,
             {
                 name: messageName,
                 data: data
@@ -21,13 +24,13 @@ var MessageDispatcher = function(air_console){
         );
     }
 
-    function sendDebounced(messageName, data) {
+    function sendDebounced(messageName, data, to) {
         if (sendDebounce !== false) {
             return;
         }
 
         sendDebounce = setTimeout(function() {
-            send(messageName, data);
+            send(messageName, data, to);
             sendDebounce = false;
         }, sendTimeout);
     }

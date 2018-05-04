@@ -4,6 +4,7 @@ var GameState = function() {
     var accelerationMax = 300;
     var accelerationTimer = null;
     var accelerationReductionInterval = 750;
+    var availableRoles = ['shooter', 'loader'];
 
     var state = {
         player: {},
@@ -11,22 +12,27 @@ var GameState = function() {
             player: [],
             acceleration: 0,
             cannonLoaded: false,
-            shootCannon: false
+            shootCannon: false,
+            roleIndex: 0
         },
         teamB: {
             player: [],
             acceleration: 0,
             cannonLoaded: false,
-            shootCannon: false
+            shootCannon: false,
+            roleIndex: 0
         }
     };
 
     var listener = {};
 
-    function dispatch(type) {
+    function dispatch(type, data) {
+        if (typeof(data) === 'undefined') {
+            data = state;
+        }
         for (var i in listener) {
             if (listener.hasOwnProperty(i) && type === i) {
-                listener[type](state);
+                listener[type](data);
             }
         }
     }
@@ -47,7 +53,8 @@ var GameState = function() {
 
         state.player[from] = {
             actions: {},
-            team: ''
+            team: '',
+            role: ''
         }
     }
 
@@ -76,12 +83,26 @@ var GameState = function() {
         state.player[from].team = data.team;
         if (data.team === 'A') {
             state.teamA.player.push(from);
+            state.player[from].role = availableRoles[state.teamA.roleIndex];
+            state.teamA.roleIndex++;
+            if (state.teamA.roleIndex > availableRoles.length) {
+                state.teamA.roleIndex = 0;
+            }
         }
         if (data.team === 'B') {
             state.teamB.player.push(from);
+            state.player[from].role = availableRoles[state.teamB.roleIndex];
+            state.teamB.roleIndex++;
+            if (state.teamB.roleIndex > availableRoles.length) {
+                state.teamB.roleIndex = 0;
+            }
         }
 
         dispatch('update');
+        dispatch('updatePlayer', {
+            id: from,
+            data: state.player[from]
+        });
     }
 
     function leaveGame(playerNumber) {

@@ -108,15 +108,23 @@ var GameController = function(divId, messageDispatcher, airConsole) {
 
     function create () {
         airConsole.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
+        var playerData = JSON.parse(localStorage.getItem('playerData'));
 
-        document.getElementById(divId).innerHTML = '' +
-            '<div id="accelerateLeft" class="button">LEFT</div>' +
-            '<div id="accelerateRight" class="button">RIGHT</div>' +
-            '<div id="loadCannon" class="button">LOAD</div>' +
-            '<!--<div id="fire" class="button">FIRE</div>-->' +
-            '<div id="shootCannon" class="button">SHOOT</div>' +
-            '<div id="vibrate" class="button">vibe</div>';
+        var html = '<div id="accelerateLeft" class="button">LEFT</div>' +
+            '<div id="accelerateRight" class="button">RIGHT</div>';
 
+        if (playerData.role === 'loader') {
+            html += '<div id="loadCannon" class="button">LOAD</div>';
+        }
+        if (playerData.role === 'shooter') {
+            html += '<div id="shootCannon" class="button">SHOOT</div>';
+        }
+
+        html += '<div id="vibrate" class="button">vibe</div>';
+
+        // '<!--<div id="fire" class="button">FIRE</div>-->' +
+
+        document.getElementById(divId).innerHTML = html;
         // register event listener
         //document.getElementById('fire').addEventListener('touchstart', startAction);
         //document.getElementById('fire').addEventListener('touchend', stopAction);

@@ -41,6 +41,10 @@ var Screen = function(messageDispatcher, gameState, airConsole){
             }
         });
 
+        gameState.on('updatePlayer', function(player, data) {
+            md.send('updatePlayer', data, player);
+        });
+
         // initialize acceleration obstacle
         gameState.startAccelerationTimer();
     }
