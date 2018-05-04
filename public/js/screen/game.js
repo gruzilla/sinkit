@@ -36,16 +36,16 @@ var SinkItScreen = function(){
     };
     
     var boatTopInputs = getDefaultInputs();
-    var boatTopInputs = getDefaultInputs();
+    var boatBottomInputs = getDefaultInputs();
 
-    var preload = function()
+    function preload()
     {
         this.load.image('boat', 'assets/boat.png');
         this.load.image('water', 'assets/water.png');
         //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     };
 
-    var create = function()
+    function create()
     {
         this.add.image(0, 0, 'water').setScale(40);
         boatBottom = this.physics.add.image(450, 0, 'boat');
@@ -57,9 +57,9 @@ var SinkItScreen = function(){
         boatTop.setCollideWorldBounds(true);
     };
 
-    var update = function()
+    function update()
     {
-        
+        boatBottom.setVelocityX(100);
     };
     
     
