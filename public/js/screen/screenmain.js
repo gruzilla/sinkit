@@ -44,7 +44,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
     initialize();
 
     return {
-        game: function(){ return game; }
+        game: game
     };
 
 };

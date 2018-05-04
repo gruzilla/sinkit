@@ -6,10 +6,13 @@
 
 var SinkItScreen = function(){
     
+    var screenWidth = window.innerWidth;
+    var screenHeight = window.innerHeight;
+    
     var config = {
         type: Phaser.AUTO,
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: screenWidth,
+        height: screenHeight,
         parent: "game",
         zoom: 1,
         physics: {
@@ -28,24 +31,26 @@ var SinkItScreen = function(){
 
     var game = new Phaser.Game(config);
     
-    var inputs = {
+    var boatData = {
         acceleration: 0
     };
     
-    var getDefaultInputs = function(){
-        return inputs;
+    var getDefaultData = function(){
+        return boatData;
     };
     
     var boat = {
         top: {
             obj: null,
-            inputs: getDefaultInputs()
+            data: getDefaultData()
         },
         bottom: {
             obj: null,
-            inputs: getDefaultInputs()
+            data: getDefaultData()
         }
     };
+    
+    var bullets = [];
 
     function preload()
     {
@@ -53,17 +58,21 @@ var SinkItScreen = function(){
         this.load.image('boatBottom', 'assets/boat-red.png');
         this.load.image('boatTop', 'assets/boat-green.png');
         this.load.image('water', 'assets/water.png');
+        this.load.image('cannonball', 'assets/cannonball.png');
         //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     };
+    
+    var physics;
 
     function create()
     {   
+        physics = this.physics;
         var drag = 10;
         var maxVelocity = 65;
         this.add.image(0, 0, 'water').setScale(window.innerWidth,window.innerHeight);
         
         boat.top.obj = this.physics.add.image(0,70, 'boatTop').setScale(0.4);
-        boat.top.obj.x = 40 + boat.top.obj.getBounds().width*0.5 + Math.random()*window.innerWidth - boat.top.obj.getBounds().width;
+        boat.top.obj.x = Math.max(40, boat.top.obj.getBounds().width*0.5 + Math.random() * (window.innerWidth - boat.top.obj.getBounds().width) - 40);
         boat.top.obj.setBounce(0);
         boat.top.obj.setCollideWorldBounds(true);
         boat.top.obj.setDragX(drag);
@@ -71,18 +80,57 @@ var SinkItScreen = function(){
         
         boat.bottom.obj = this.physics.add.image(0, 0, 'boatBottom').setScale(0.4);
         boat.bottom.obj.y = window.innerHeight - boat.bottom.obj.getBounds().height*0.5-20;
-        boat.bottom.obj.x = 40 + boat.bottom.obj.getBounds().width*0.5 + Math.random()*window.innerWidth - boat.bottom.obj.getBounds().width;
+        boat.bottom.obj.x = Math.max(40, boat.bottom.obj.getBounds().width*0.5 + Math.random() * (window.innerWidth - boat.top.obj.getBounds().width) - 40);
         boat.bottom.obj.setBounce(0);
         boat.bottom.obj.setCollideWorldBounds(true);
         boat.bottom.obj.setDragX(drag);
         boat.bottom.obj.setMaxVelocity(maxVelocity);
 
     };
+    
+    var killObj = function(obj){
+        console.log(obj);
+        obj.parent.remove(obj);
+    };
+    
+    var fireBullet = function (team, firingBoat) {
 
-    function update()
-    {
+        var inverse = 1;
+        var innerBorder = firingBoat.getBounds().height;
+        if (team == "bottom") {
+            inverse = -1;
+            innerBorder = 0;
+        }
 
-    };    
+        var bullet = physics.add.image(firingBoat.getCenter().x, firingBoat.getBounds().y + innerBorder, 'cannonball').setScale(0.4);
+        if(team == "bottom"){
+            bullet.y -= bullet.getBounds().height;
+        } else {
+            bullet.y += bullet.getBounds().height;
+        }
+        bullet.setBounce(0);
+        bullet.setCollideWorldBounds(false);
+        bullet.setVelocityY(100 * inverse);
+        bullet.setAccelerationY(20 * inverse);
+        bullets.push(bullet);
+        
+    };
+
+    function update(){
+        
+        for(var i = bullets.length - 1; i >= 0; i--){           
+            if(bullets[i].x < 0 || bullets[i].x > screenWidth || bullets[i].y < 0 || bullets[i].y > screenHeight){
+                bullets[i].destroy();
+                bullets.splice(i,1);
+            }
+        }
+        
+    };
+    
+    var shoot = function(team){
+        fireBullet(team,boat[team].obj);
+        console.log(bullets.length);
+    };
     
     var updateBoat = function(team,data){
         
@@ -92,6 +140,9 @@ var SinkItScreen = function(){
                 case "acceleration":
                     boat[team].obj.setAccelerationX(data[k]);
                     console.log(boat[team].obj.body.velocity);
+                    break;
+                case "shoot":
+                    shoot(team);
                     break;
                 default:
                     console.log(k,data[k]);
@@ -104,6 +155,7 @@ var SinkItScreen = function(){
     
     
     return {
+        shoot: shoot,
         updateBoat: updateBoat,
         game: game
     };
