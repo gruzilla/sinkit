@@ -172,6 +172,7 @@ var GameController = function(divId, messageDispatcher, airConsole) {
     }
 
     return {
-        create: create
+        create: create,
+        onFinished: onFinished
     };
 };
