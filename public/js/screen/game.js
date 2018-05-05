@@ -325,7 +325,7 @@ var SinkItScreen = function(restart,victory){
                     console.log(boat[team].obj.body.acceleration);
                     break;
                 case "velocity":
-                    boat[team].obj.setVelocityX(boat[team].obj.body.velocity + data[k]);
+                    boat[team].obj.setVelocityX(boat[team].obj.body.velocity.x + data[k]);
                     console.log(boat[team].obj.body.velocity);
                     console.log(boat[team].obj.body.acceleration);
                     break;
