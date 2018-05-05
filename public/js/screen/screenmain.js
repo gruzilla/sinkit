@@ -56,23 +56,27 @@ var Screen = function(messageDispatcher, gameState, airConsole){
             }
 
             var teamAShield = true;
-            for (var i = 0; i < state.teamA.player; i++) {
-                if (!state.player[i].actions.hasOwnProperty('shield') || !state.player[i].actions.shield) {
+            for (var i = 0; i < state.teamA.player.length; i++) {
+                var playerA = state.teamA.player[i];
+                if (!playerA.actions.hasOwnProperty('shield') || !playerA.actions.shield) {
                     teamAShield = false;
                     break;
                 }
             }
+            console.log('team a shield ', teamAShield);
             if (teamAShield) {
                 game.updateBoat('top', {shield: true});
             }
 
             var teamBShield = true;
-            for (var j = 0; j < state.teamB.player; j++) {
-                if (!state.player[j].actions.hasOwnProperty('shield') || !state.player[i].actions.shield) {
+            for (var j = 0; j < state.teamB.player.length; j++) {
+                var playerB = state.teamB.player[j];
+                if (!playerB.actions.hasOwnProperty('shield') || !playerB.actions.shield) {
                     teamBShield = false;
                     break;
                 }
             }
+            console.log('team b shield ', teamBShield);
             if (teamBShield) {
                 game.updateBoat('bottom', {shield: true});
             }
