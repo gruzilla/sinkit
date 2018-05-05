@@ -135,7 +135,6 @@ var SinkItScreen = function(restart,victory){
     };
 
     var killObj = function(obj){
-        console.log(obj);
         obj.parent.remove(obj);
     };
 
@@ -318,14 +317,14 @@ var SinkItScreen = function(restart,victory){
             switch(k) {
                 case "acceleration":
                     boat[team].obj.setAccelerationX(data[k]);
-                    console.log(boat[team].obj.body.velocity);
-                    console.log(boat[team].obj.body.acceleration);
+//                    console.log(boat[team].obj.body.velocity);
+//                    console.log(boat[team].obj.body.acceleration);
                     break;
                 case "velocity":
                     boat[team].obj.setVelocityX(boat[team].obj.body.velocity.x + data[k]);
                     //boat[team].obj.setAccelerationX(data[k]);
-                    console.log(boat[team].obj.body.velocity);
-                    console.log(boat[team].obj.body.acceleration);
+//                    console.log(boat[team].obj.body.velocity);
+//                    console.log(boat[team].obj.body.acceleration);
                     break;
                 case "fullstop":
                     boat[team].obj.setVelocityX(0);
