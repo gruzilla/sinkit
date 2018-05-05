@@ -5,10 +5,10 @@
  */
 
 var SinkItScreen = function(restart,victory){
-    var drag = 0;
-    var friction = 0;
+    var drag = 30;
+    var friction = 10;
     var maxVelocity = 160;
-    var boatLives = 1;
+    var boatLives = 3;
     var boatScale = 0.4;
     var restartCallback = restart;
     var victoryCallback = victory;
@@ -62,6 +62,8 @@ var SinkItScreen = function(restart,victory){
     };
     
     var bullets = [];
+    var heartsTop = [];
+    var heartsBottom = [];
 
     function preload()
     {
@@ -76,6 +78,21 @@ var SinkItScreen = function(restart,victory){
     };
     
     var physics,gameObj;
+    
+    var buildHearts = function(){
+        
+        var startPositionY = screenHeight * 0.5 - boatLives * 0.5 * 30;
+        
+        for(var i = 0; i < boatLives; i++){
+            var heart = physics.add.image(30, startPositionY + 30 * i, 'boatTop').setScale(0.05);
+            heart.alpha = 0.5;
+            heartsTop.push(heart);
+            heart = physics.add.image(screenWidth - 40, startPositionY + 30 * i, 'boatBottom').setScale(0.05);
+            heart.alpha = 0.5;
+            heartsBottom.push(heart);           
+        }
+        
+    };
 
     function create()
     {   
@@ -112,6 +129,8 @@ var SinkItScreen = function(restart,victory){
         victoryBottom = this.add.image(screenWidth * 0.5,screenHeight * 0.5,'victory-bottom').setScale(0.8).setInteractive();
         victoryBottom.alpha = 0;
         victoryBottom.on('pointerup',restartCallback);
+        
+        buildHearts();
 
     };
     
@@ -140,6 +159,15 @@ var SinkItScreen = function(restart,victory){
         bullet.setBounce(0);
         bullet.setCollideWorldBounds(false);
         bullet.setVelocityY(100 * inverse);
+        if(firingBoat.body.velocity.x < 0){
+            bullet.setVelocityX(Math.random()*-10);
+            bullet.setAccelerationX(-0.25 * firingBoat.body.acceleration.x);
+        } else if((firingBoat.body.velocity.x > 0)) {
+            bullet.setVelocityX(Math.random()*10);
+            bullet.setAccelerationX(0.25 * firingBoat.body.acceleration.x);
+        }
+
+        console.log(firingBoat.body.acceleration.x);
         bullet.setAccelerationY(20 * inverse);
         physics.add.overlap(bullet, boat.bottom.obj, hitBoat, null, this);
         physics.add.overlap(bullet, boat.top.obj, hitBoat, null, this);
@@ -186,6 +214,39 @@ var SinkItScreen = function(restart,victory){
         if(ignoreHits) return true;
         boat[hitBoat.name].data.lives--;
         var lives = boat[hitBoat.name].data.lives;
+        
+        var lostHeart;
+        switch(hitBoat.name){
+            case "top":
+                if(heartsTop.length != 0){
+                    lostHeart = heartsTop.pop();
+                    lostHeart.blendMode = Phaser.BlendModes.ADD;
+                    gameObj.tweens.add({
+                        targets: lostHeart,
+                        alpha: 0,
+                        angle: -720,
+                        duration: 700,
+                        ease: 'Cubic.easeInOut',
+                        delay: 0
+                    });
+                }
+                break;
+            case "bottom":
+                if(heartsBottom.length != 0){
+                    lostHeart = heartsBottom.pop();
+                    lostHeart.blendMode = Phaser.BlendModes.ADD;
+                    gameObj.tweens.add({
+                        targets: lostHeart,
+                        alpha: 0,
+                        angle: 720,
+                        duration: 700,
+                        ease: 'Cubic.easeInOut',
+                        delay: 0
+                    });
+                }
+                break;
+            default:
+        }
 
         if(lives == 0){
             var winner = "top";
@@ -196,7 +257,6 @@ var SinkItScreen = function(restart,victory){
                     alpha: 1,
                     duration: 2000,
                     ease: 'Quad.easeIn',
-                    easeParams: [ 3.5 ],
                     delay: 1500
                 });
             } else {
@@ -205,7 +265,6 @@ var SinkItScreen = function(restart,victory){
                     alpha: 1,
                     duration: 2000,
                     ease: 'Quad.easeIn',
-                    easeParams: [ 3.5 ],
                     delay: 1500
                 });
             }
@@ -235,6 +294,12 @@ var SinkItScreen = function(restart,victory){
                 case "acceleration":
                     boat[team].obj.setAccelerationX(data[k]);
                     console.log(boat[team].obj.body.velocity);
+                    console.log(boat[team].obj.body.acceleration);
+                    break;
+                case "velocity":
+                    boat[team].obj.setVelocityX(data[k]);
+                    console.log(boat[team].obj.body.velocity);
+                    console.log(boat[team].obj.body.acceleration);
                     break;
                 case "shoot":
                     shoot(team);
