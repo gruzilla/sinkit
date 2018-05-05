@@ -249,6 +249,8 @@ var GameState = function() {
                 state.teamB.velocity = (direction >= 0 ? 25 : -25);
                 break;
         }
+
+        dispatch('update');
     }
         /*
         step *= (direction >= 0 ? 1 : -1);
