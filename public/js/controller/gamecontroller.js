@@ -171,6 +171,17 @@ var GameController = function(divId, messageDispatcher, airConsole) {
             localStorage.setItem('lastVictory', data);
             onFinishedCallback();
         });
+        /** listen for specific messages **/
+        messageDispatcher.register('playerUpdate', function(from, data) {
+            console.debug('received new player update');
+            if (from !== AirConsole.SCREEN) {
+                return;
+            }
+            console.debug('redrawing');
+
+            localStorage.setItem('playerData', JSON.stringify(data));
+            create();
+        });
     }
 
     return {

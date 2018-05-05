@@ -47,13 +47,11 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
 
     /** listen for specific messages **/
     messageDispatcher.register('playerUpdate', function(from, data) {
-        console.debug('player update ', from, data);
         if (from !== AirConsole.SCREEN) {
             return;
         }
 
         localStorage.setItem('playerData', JSON.stringify(data));
-        console.debug('sending on finish');
         onFinishedCallback();
     });
 
