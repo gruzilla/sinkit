@@ -5,8 +5,8 @@
  */
 
 var SinkItScreen = function(restart,victory){
-    var drag = 10;
-    var friction = 0.2;
+    var drag = 0;
+    var friction = 0;
     var maxVelocity = 160;
     var boatLives = 1;
     var boatScale = 0.4;
@@ -146,7 +146,9 @@ var SinkItScreen = function(restart,victory){
 
     function update(){
         
-        if(stopUpdate) return;
+        if(stopUpdate){
+            return;
+        }
         
         for(var i = bullets.length - 1; i >= 0; i--){           
             if(bullets[i].x < 0 || bullets[i].x > screenWidth || bullets[i].y < 0 || bullets[i].y > screenHeight){
@@ -162,7 +164,6 @@ var SinkItScreen = function(restart,victory){
             boatScale *= 0.995;
             boatScale = Math.max(0,boatScale);
             boat.bottom.obj.setScale(boatScale);
-            victoryTop.alpha += 0.007;
         } else if(boat.bottom.data.lives == 0 && boat.bottom.obj.alpha <= 0){
             stopUpdate = true;
         }
@@ -173,7 +174,6 @@ var SinkItScreen = function(restart,victory){
             boatScale = Math.max(0,boatScale);
             boat.top.obj.angle *= 1.04;
             boat.top.obj.setScale(boatScale);
-            victoryBottom.alpha += 0.007;
         } else if(boat.top.data.lives == 0 && boat.top.obj.alpha <= 0){
             stopUpdate = true;
         }
@@ -189,15 +189,30 @@ var SinkItScreen = function(restart,victory){
             var winner = "top";
             if(hitBoat.name == "top"){
                 winner = "bottom";
+                gameObj.tweens.add({
+                    targets: victoryBottom,
+                    alpha: 1,
+                    duration: 2000,
+                    ease: 'Quad.easeIn',
+                    easeParams: [ 3.5 ],
+                    delay: 1500
+                });
+            } else {
+                gameObj.tweens.add({
+                    targets: victoryTop,
+                    alpha: 1,
+                    duration: 2000,
+                    ease: 'Quad.easeIn',
+                    easeParams: [ 3.5 ],
+                    delay: 1500
+                });
             }
             victoryCallback(winner);
             hitBoat.angle = 1;
             ignoreHits = true;
-            setTimeout(function(){
-                victoryCallback();
-            },500);
+            
         }
-        mainCamera.shake(150);
+        mainCamera.shake(550);
         attacker.alpha = 0;
         attacker.disableBody(true, true);
     };
