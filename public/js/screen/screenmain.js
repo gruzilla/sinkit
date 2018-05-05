@@ -58,7 +58,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
 
             var teamAShield = state.teamA.player.length > 0;
             for (var i = 0; i < state.teamA.player.length; i++) {
-                var playerA = state.teamA.player[i];
+                var playerA = state.player[state.teamA.player[i]];
                 if (typeof(playerA.actions) === 'undefined') {
                     teamAShield = false;
                     break;
@@ -75,7 +75,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
 
             var teamBShield = state.teamB.player.length > 0;
             for (var j = 0; j < state.teamB.player.length; j++) {
-                var playerB = state.teamB.player[j];
+                var playerB = state.player[state.teamB.player[j]];
                 if (typeof(playerB.actions) === 'undefined') {
                     teamBShield = false;
                     break;
