@@ -65,8 +65,8 @@ var SinkItScreen = function(restart,victory){
     function preload()
     {
                         
-        this.load.image('boatBottom', 'assets/boat-red.png');
-        this.load.image('boatTop', 'assets/boat-green.png');
+        this.load.image('boatBottom', 'assets/boat-red-cannon.png');
+        this.load.image('boatTop', 'assets/boat-green-cannon.png');
         this.load.image('water', 'assets/water.png');
         this.load.image('victory-top', 'assets/boat-green.png');
         this.load.image('victory-bottom', 'assets/boat-red.png');
