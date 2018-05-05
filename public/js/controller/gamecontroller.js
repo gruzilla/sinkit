@@ -101,22 +101,17 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         return false;
     }
 
-    function preload () {
-        //this.load.image('sky', 'src/games/firstgame/assets/sky.png');
-        //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-    }
-
     function create () {
         airConsole.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
         var playerData = JSON.parse(localStorage.getItem('playerData'));
 
         var actionButton = '<div id="loadCannon" class="large button">LOAD</div>';
         var teamName = playerData.team === 'A' ? 'Team Green' : 'Team Red';
-        var roleName = 'Helmnsman';
+        var roleName = 'Helmsman';
 
         if (playerData.role === 'shooter') {
             actionButton = '<div id="shootCannon" class="large button">SHOOT</div>';
-            roleName = 'Cannonier';
+            roleName = 'Cannoneer';
         }
 
         var html = '' +
@@ -164,10 +159,10 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         messageDispatcher.register('vibrate', function() {
             airConsole.vibrate(200);
         });
-    }
-
-    function update () {
-
+        messageDispatcher.register('victory', function(data) {
+            localStorage.setItem('lastVictory', data);
+            onFinishedCallback();
+        });
     }
 
     return {

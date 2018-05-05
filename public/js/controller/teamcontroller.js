@@ -23,11 +23,6 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
         onFinishedCallback = callback;
     }
 
-    function preload () {
-        //this.load.image('sky', 'src/games/firstgame/assets/sky.png');
-        //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-    }
-
     function create () {
         airConsole.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
 
@@ -41,6 +36,7 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
         document.getElementById('teamB').addEventListener('touchstart', function () { return joinTeam('B'); });
     }
 
+    /** listen for specific messages **/
     messageDispatcher.register('playerUpdate', function(from, data) {
         if (from !== AirConsole.SCREEN) {
             return;
@@ -49,10 +45,6 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
         localStorage.setItem('playerData', JSON.stringify(data));
         onFinishedCallback();
     });
-
-    function update () {
-
-    }
 
     return {
         create: create,

@@ -4,54 +4,36 @@
  * and open the template in the editor.
  */
 
-var TeamController = function(divId, messageDispatcher, airConsole) {
+var VictoryController = function(divId, messageDispatcher, airConsole) {
 
     var onFinishedCallback = function() {};
 
     /** game actions **/
     // long running actions
-    function joinTeam(team) {
-        messageDispatcher.send(
-            'joinTeam',
-            { team: team }
-        );
-
-        return false;
-    }
 
     function onFinished(callback) {
         onFinishedCallback = callback;
     }
 
-    function preload () {
-        //this.load.image('sky', 'src/games/firstgame/assets/sky.png');
-        //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+    function restart() {
+        messageDispatcher.send('restart');
     }
 
     function create () {
         airConsole.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
 
+        var lastTeamVictory = localStorage.getItem('lastVictory');
+        var playerData = localStorage.getItem('playerData');
+        var win = playerData.team === lastTeamVictory;
+
         document.getElementById(divId).innerHTML = '' +
-            '<div id="header"><div id="title" class="v-center">Choose your team</div></div>' +
-            '<div id="teamA" class="button">Team Green</div>' +
-            '<div id="teamB" class="button">Team Red</div>';
+            '<div id="victory">' + (win ? 'VICTORY' : 'LOST') + '</div>' +
+            '<div class="buttons">'+
+            '<div id="restart" class="button large">RESTART</div>'+
+            '</div>'
+        ;
 
-        // register event listener
-        document.getElementById('teamA').addEventListener('touchstart', function () { return joinTeam('A'); });
-        document.getElementById('teamB').addEventListener('touchstart', function () { return joinTeam('B'); });
-    }
-
-    messageDispatcher.register('playerUpdate', function(from, data) {
-        if (from !== AirConsole.SCREEN) {
-            return;
-        }
-
-        localStorage.setItem('playerData', JSON.stringify(data));
-        onFinishedCallback();
-    });
-
-    function update () {
-
+        document.getElementById('restart').addEventListener('touchstart', restart);
     }
 
     return {

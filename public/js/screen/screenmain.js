@@ -9,7 +9,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
     var game;
 
     var victory = function(team){
-        
+        messageDispatcher.broadcast('victory', team);
     };
 
     var restart = function(){
@@ -34,6 +34,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         md.register('vibrate', function vibrateClients() {
             md.broadcast('vibrate');
         });
+        md.register('restart', restart);
 
         // remove player when they leave the session
         airConsole.onActivePlayersChange = gameState.leaveGame;
