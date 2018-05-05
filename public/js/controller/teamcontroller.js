@@ -6,7 +6,7 @@
 
 var TeamController = function(divId, messageDispatcher, airConsole) {
 
-    var DEBUG = false;
+    var DEBUG = true;
 
     var onFinishedCallback = function() {};
 
@@ -18,7 +18,7 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
             { team: team }
         );
         if (DEBUG) {
-            data = {role:'shooter', team: 'A'};
+            data = {role:'both', team: 'A'};
             localStorage.setItem('playerData', JSON.stringify(data));
             onFinishedCallback();
         }

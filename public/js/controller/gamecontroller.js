@@ -114,6 +114,7 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         var alternativeActionButton = actionButton;
         var teamName = playerData.team === 'A' ? 'Team Green' : 'Team Red';
         var roleName = 'Helmsman';
+        var bottomButtonClasses = 'large';
 
         if (playerData.role === 'shooter') {
             alternativeActionButton = '';
@@ -123,6 +124,8 @@ var GameController = function(divId, messageDispatcher, airConsole) {
             alternativeActionButton = '';
         } else if (playerData.role === 'both') {
             actionButton = '<div id="shootCannon" class="large button">SHOOT</div>';
+            alternativeActionButton = alternativeActionButton.replace('large', '');
+            bottomButtonClasses = bottomButtonClasses.replace('large', '');
             roleName = 'Both';
         }
 
@@ -141,10 +144,11 @@ var GameController = function(divId, messageDispatcher, airConsole) {
             '<div id="accelerateRight" class="big grad-right button">></div>' +
             '</div>';
 
-
-        html += '<div id="vibrate" class="button large">vibe</div>' +
+        html += '<div class="buttons">'+
+            '<div id="vibrate" class="button ' + bottomButtonClasses + '">vibe</div>' +
             alternativeActionButton +
-            '<div id="shield" class="button large">shield</div>'
+            '<div id="shield" class="button ' + bottomButtonClasses + '">shield</div>' +
+            '</div>'
         ;
 
         // '<!--<div id="fire" class="button">FIRE</div>-->' +
