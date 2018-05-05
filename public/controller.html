@@ -34,6 +34,10 @@
             gameCtrl.onFinished(function() {
                 victoryCtrl.create();
             });
+            victoryCtrl.onFinished(function() {
+                localStorage.removeItem('lastVictory');
+                teamCtrl.create();
+            });
         </script>
     </body>
 </html>
