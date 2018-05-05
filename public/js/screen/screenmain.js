@@ -44,7 +44,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         // link game state changes and update of DOM
         gameState.on('update', function(state) {
             document.getElementById('gamestate').innerHTML = JSON.stringify(state);
-
+            console.log(state.teamA.velocity,state.teamB.velocity);
             game.updateBoat('top', {velocity: state.teamA.velocity});
             game.updateBoat('bottom', {velocity: state.teamB.velocity});
 
