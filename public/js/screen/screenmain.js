@@ -56,15 +56,14 @@ var Screen = function(messageDispatcher, gameState, airConsole){
                 game.updateBoat('bottom', {shoot: true});
             }
 
-            var teamAShield = true;
+            var teamAShield = false;
             for (var i = 0; i < state.teamA.player.length; i++) {
                 var playerA = state.teamA.player[i];
                 if (typeof(playerA.actions) === 'undefined') {
                     break;
                 }
-                if (!playerA.actions.hasOwnProperty('shield') || !playerA.actions.shield) {
-                    teamAShield = false;
-                    break;
+                if (playerA.actions.hasOwnProperty('shield') && playerA.actions.shield) {
+                    teamAShield = teamAShield && true;
                 }
             }
             console.log('team a shield ', teamAShield);
@@ -72,15 +71,14 @@ var Screen = function(messageDispatcher, gameState, airConsole){
                 game.updateBoat('top', {shield: true});
             }
 
-            var teamBShield = true;
+            var teamBShield = false;
             for (var j = 0; j < state.teamB.player.length; j++) {
                 var playerB = state.teamB.player[j];
                 if (typeof(playerB.actions) === 'undefined') {
                     break;
                 }
-                if (!playerB.actions.hasOwnProperty('shield') || !playerB.actions.shield) {
-                    teamBShield = false;
-                    break;
+                if (playerB.actions.hasOwnProperty('shield') && playerB.actions.shield) {
+                    teamBShield = teamBShield && true;
                 }
             }
             console.log('team b shield ', teamBShield);
