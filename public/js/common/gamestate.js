@@ -26,6 +26,7 @@ var GameState = function() {
             roleIndex: 0
         };
     }
+    initState();
 
     function dispatch(type, data) {
         if (typeof(data) === 'undefined') {
