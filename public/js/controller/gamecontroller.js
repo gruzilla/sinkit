@@ -149,11 +149,11 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         //document.getElementById('fire').addEventListener('touchstart', startAction);
         //document.getElementById('fire').addEventListener('touchend', stopAction);
 
-        if (playerData.role === 'shooter') {
+        if (playerData.role === 'shooter' || playerData.role === 'both') {
             document.getElementById('shootCannon').addEventListener('touchstart', shootCannon);
         }
 
-        if (playerData.role === 'loader') {
+        if (playerData.role === 'loader' || playerData.role === 'both') {
             document.getElementById('loadCannon').addEventListener('touchstart', loadCannon);
         }
 
