@@ -87,9 +87,11 @@ var Screen = function(messageDispatcher, gameState, airConsole){
 
                     if (updateChange.state.teamA.fullstop) {
                         game.updateBoat('top', {fullstop: true});
+                        updateChange.state.teamA.fullstop = false;
                     }
                     if (updateChange.state.teamB.fullstop) {
                         game.updateBoat('bottom', {fullstop: true});
+                        updateChange.state.teamB.fullstop = false;
                     }
 
                     break;
