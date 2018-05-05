@@ -34,6 +34,7 @@ var VictoryController = function(divId, messageDispatcher, airConsole) {
         ;
 
         document.getElementById('restart').addEventListener('touchstart', restart);
+        onFinishedCallback();
     }
 
     return {
