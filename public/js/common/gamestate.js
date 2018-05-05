@@ -331,13 +331,13 @@ var GameState = function() {
 
             switch (data.direction) {
                 case 'right':
-                    accelerate(from, +1);
+                    accelerate(from, 25);
                     break;
                 case 'left':
-                    accelerate(from, -1);
+                    accelerate(from, -25);
                     break;
             }
-        },
+        }
         // startAccelerationTimer: startAccelerationTimer
     };
 };
