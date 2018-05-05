@@ -40,7 +40,7 @@ var GameController = function(divId, messageDispatcher, airConsole) {
             { action: action }
         );
     }
-    function stopaction(action) {
+    function stopAction(action) {
         messageDispatcher.send(
             'stopAction',
             { action: action }
@@ -180,9 +180,9 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         }
 
         document.getElementById('accelerateRight').addEventListener('touchstart', accelerateRight);
-        document.getElementById('accelerateRight').addEventListener('touchend', stopAction.bind(this, 'accelerateRight'));
+        document.getElementById('accelerateRight').addEventListener('touchend', function() {stopAction('accelerateRight');});
         document.getElementById('accelerateLeft').addEventListener('touchstart', accelerateLeft);
-        document.getElementById('accelerateLeft').addEventListener('touchend', stopAction.bind(this, 'accelerateLeft'));
+        document.getElementById('accelerateLeft').addEventListener('touchend', function() {stopAction('accelerateLeft');});
         document.getElementById('vibrate').addEventListener('touchstart', vibrate);
 
         // message handler registration
