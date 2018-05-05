@@ -114,6 +114,8 @@ var GameController = function(divId, messageDispatcher, airConsole) {
             alternativeActionButton = '';
             actionButton = '<div id="shootCannon" class="large button">SHOOT</div>';
             roleName = 'Cannoneer';
+        } else if (playerData.role === 'loader') {
+            alternativeActionButton = '';
         } else if (playerData.role === 'both') {
             actionButton = '<div id="shootCannon" class="large button">SHOOT</div>';
             roleName = 'Both';
