@@ -4,6 +4,7 @@ var GameState = function() {
     var accelerationMax = 300;
     var accelerationTimer = null;
     var accelerationReductionInterval = 750;
+    var initialRole = 'both';
     var availableRoles = ['shooter', 'loader'];
 
     var state = {
@@ -81,17 +82,22 @@ var GameState = function() {
 
         initPlayer(from);
         state.player[from].team = data.team;
+        var firstPlayer = false;
+
         if (data.team === 'A') {
+            firstPlayer = state.teamA.player.length === 0;
+            state.player[from].role = firstPlayer ? initialRole : availableRoles[state.teamA.roleIndex];
             state.teamA.player.push(from);
-            state.player[from].role = availableRoles[state.teamA.roleIndex];
+
             state.teamA.roleIndex++;
             if (state.teamA.roleIndex >= availableRoles.length) {
                 state.teamA.roleIndex = 0;
             }
-        }
-        if (data.team === 'B') {
+        } else if (data.team === 'B') {
+            firstPlayer = state.teamB.player.length === 0;
+            state.player[from].role = firstPlayer ? initialRole : availableRoles[state.teamB.roleIndex];
             state.teamB.player.push(from);
-            state.player[from].role = availableRoles[state.teamB.roleIndex];
+
             state.teamB.roleIndex++;
             if (state.teamB.roleIndex >= availableRoles.length) {
                 state.teamB.roleIndex = 0;
@@ -103,6 +109,33 @@ var GameState = function() {
             id: from,
             data: state.player[from]
         });
+        if (!firstPlayer) {
+            if (data.team === 'A') {
+                var newARole = availableRoles[state.teamA.roleIndex];
+                state.teamA.roleIndex++;
+                if (state.teamA.roleIndex >= availableRoles.length) {
+                    state.teamA.roleIndex = 0;
+                }
+                state.player[state.teamA.player[0]].team = newARole;
+
+                dispatch('playerChosen', {
+                    id: state.teamA.player[0],
+                    data: state.player[state.teamA.player[0]]
+                });
+            } else if (data.team === 'B') {
+                var newBRole = availableRoles[state.teamB.roleIndex];
+                state.teamB.roleIndex++;
+                if (state.teamB.roleIndex >= availableRoles.length) {
+                    state.teamB.roleIndex = 0;
+                }
+                state.player[state.teamB.player[0]].team = newBRole;
+
+                dispatch('playerChosen', {
+                    id: state.teamB.player[0],
+                    data: state.player[state.teamB.player[0]]
+                });
+            }
+        }
     }
 
     function leaveGame(playerNumber) {

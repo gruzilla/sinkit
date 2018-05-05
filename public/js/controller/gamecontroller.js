@@ -106,12 +106,17 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         var playerData = JSON.parse(localStorage.getItem('playerData'));
 
         var actionButton = '<div id="loadCannon" class="large button">LOAD</div>';
+        var alternativeActionButton = actionButton;
         var teamName = playerData.team === 'A' ? 'Team Green' : 'Team Red';
         var roleName = 'Helmsman';
 
         if (playerData.role === 'shooter') {
+            alternativeActionButton = '';
             actionButton = '<div id="shootCannon" class="large button">SHOOT</div>';
             roleName = 'Cannoneer';
+        } else if (playerData.role === 'both') {
+            actionButton = '<div id="shootCannon" class="large button">SHOOT</div>';
+            roleName = 'Both';
         }
 
         var html = '' +
@@ -134,7 +139,8 @@ var GameController = function(divId, messageDispatcher, airConsole) {
             //'<div id="vibrate" class="button">vibe</div>';
 
 
-        html += '<div id="vibrate" class="button large">vibe</div>';
+        html += '<div id="vibrate" class="button large">vibe</div>' +
+            alternativeActionButton;
 
         // '<!--<div id="fire" class="button">FIRE</div>-->' +
 
