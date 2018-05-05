@@ -11,7 +11,11 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         shootCannon: false,
         shield: false
     };
-    var coolDownTimeout = 1000;
+    var coolDownTimeouts = {
+        loadCannon: 1000,
+        shootCannon: 1000,
+        shield: 4000
+    };
     var coolDownInterval = 10;
     var hapticFeedback = 15;
 
@@ -53,7 +57,7 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         }
 
         coolDown[coolDownTrigger] = true;
-        var progress = coolDownTimeout;
+        var progress = coolDownTimeouts[coolDownTrigger];
         var coolDowner = window.setInterval(
             function() {
                 progress -= coolDownInterval;
@@ -67,7 +71,7 @@ var GameController = function(divId, messageDispatcher, airConsole) {
                 coolDown[coolDownTrigger] = false;
                 updateCoolDownObject(coolDownTrigger, 'finished');
             },
-            coolDownTimeout
+            coolDownTimeouts[coolDownTrigger]
         );
     }
 
