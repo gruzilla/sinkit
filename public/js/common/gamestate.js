@@ -236,7 +236,7 @@ var GameState = function() {
     // not called directly, that's why the direction is 2nd arg, not data
     function accelerate(from, direction, step) {
         //console.debug('internal acceleration', arguments);
-        if (typeof(step) === 'undefined') {
+        if (typeof(step) == 'undefined') {
             step = accelerationStep;
         }
 
@@ -331,10 +331,10 @@ var GameState = function() {
 
             switch (data.direction) {
                 case 'right':
-                    accelerate(from, 25);
+                    accelerate(from, 1);
                     break;
                 case 'left':
-                    accelerate(from, -25);
+                    accelerate(from, -1);
                     break;
             }
         }
