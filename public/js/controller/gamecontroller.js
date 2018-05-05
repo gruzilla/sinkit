@@ -176,9 +176,9 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         }
 
         document.getElementById('accelerateRight').addEventListener('touchstart', accelerateRight);
-        document.getElementById('accelerateRight').addEventListener('touchend', stopAction.bind('accelerateRight'));
+        document.getElementById('accelerateRight').addEventListener('touchend', stopAction.bind(this, 'accelerateRight'));
         document.getElementById('accelerateLeft').addEventListener('touchstart', accelerateLeft);
-        document.getElementById('accelerateLeft').addEventListener('touchend', stopAction.bind('accelerateLeft'));
+        document.getElementById('accelerateLeft').addEventListener('touchend', stopAction.bind(this, 'accelerateLeft'));
         document.getElementById('vibrate').addEventListener('touchstart', vibrate);
 
         // message handler registration
