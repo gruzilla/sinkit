@@ -85,10 +85,10 @@ var GameState = function() {
     }
 
     function checkFullstop(teamName) {
-        console.log('teamName', teamName);
         accelerateLeft = false;
         accelerateRight = false;
-        state[teamName].player.forEach(function(player) {
+        state[teamName].player.forEach(function(playerIndex) {
+            var player = state.player[playerIndex];
             if (typeof player.actions === 'undefined' ||
                 typeof player.actions['accelerateLeft'] === 'undefined' ||
                 typeof player.actions['accelerateRight'] === 'undefined'
