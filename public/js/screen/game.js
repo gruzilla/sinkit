@@ -132,8 +132,10 @@ var SinkItScreen = function(restart,victory){
         var bullet = physics.add.image(firingBoat.getCenter().x, firingBoat.getBounds().y + innerBorder, 'cannonball').setScale(0.4);
         if(team == "bottom"){
             bullet.y -= bullet.getBounds().height;
+            bullet.x += 22;
         } else {
             bullet.y += bullet.getBounds().height;
+            bullet.x -= 12;
         }
         bullet.setBounce(0);
         bullet.setCollideWorldBounds(false);
