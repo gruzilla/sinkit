@@ -49,14 +49,16 @@ var SinkItScreen = function(restart,victory){
             obj: null,
             data: {
                 acceleration: 0,
-                lives: boatLives
+                lives: boatLives,
+                shield: false
             }
         },
         bottom: {
             obj: null,
             data: {
                 acceleration: 0,
-                lives: boatLives
+                lives: boatLives,
+                shield: false
             }
         }
     };
@@ -166,8 +168,6 @@ var SinkItScreen = function(restart,victory){
             bullet.setVelocityX(Math.random()*10);
             bullet.setAccelerationX(0.25 * firingBoat.body.acceleration.x);
         }
-
-        console.log(firingBoat.body.acceleration.x);
         bullet.setAccelerationY(20 * inverse);
         physics.add.overlap(bullet, boat.bottom.obj, hitBoat, null, this);
         physics.add.overlap(bullet, boat.top.obj, hitBoat, null, this);
@@ -210,8 +210,19 @@ var SinkItScreen = function(restart,victory){
         
     };
     
+    var hitShield = function(attacker,hitBoat){
+        attacker.setVelocityX(attacker.body.velocity.x * -1.25);
+        attacker.setVelocityY(attacker.body.velocity.y * -1.25);
+        attacker.setAccelerationX(attacker.body.acceleration.x * -2.25);
+        attacker.setAccelerationY(attacker.body.acceleration.y * -1.25);
+    };
+    
     var hitBoat = function(attacker,hitBoat){
         if(ignoreHits) return true;
+        if(boat[hitBoat.name].data.shield){
+            hitShield(attacker,hitBoat);
+            return true;
+        }
         boat[hitBoat.name].data.lives--;
         var lives = boat[hitBoat.name].data.lives;
         
@@ -282,6 +293,23 @@ var SinkItScreen = function(restart,victory){
         fireBullet(team,boat[team].obj);  
     };
     
+    var activateShield = function(team){
+        boat[team].obj.blendMode = Phaser.BlendModes.ADD;
+        var shield = gameObj.tweens.add({
+            targets: boat[team].obj,
+            alpha: 0.5,
+            duration: 400,
+            ease: 'Cubic.easeInOut',
+            delay: 0,
+            repeat: 2,
+            yoyo: true 
+        });
+        shield.setCallback("onComplete",function(team){
+            boat[team].obj.blendMode = Phaser.BlendModes.NORMAL;
+            boat[team].data.shield = false;
+        },[team]);
+    };
+    
     var updateBoat = function(team,data){
         
         if(boat[team].data.lives == 0){
@@ -297,9 +325,15 @@ var SinkItScreen = function(restart,victory){
                     console.log(boat[team].obj.body.acceleration);
                     break;
                 case "velocity":
-                    boat[team].obj.setVelocityX(data[k]);
+                    boat[team].obj.setVelocityX(boat[team].obj.body.velocity + data[k]);
                     console.log(boat[team].obj.body.velocity);
                     console.log(boat[team].obj.body.acceleration);
+                    break;
+                case "fullstop":
+                    boat[team].obj.setVelocityX(0);
+                    break;
+                case "shield":
+                    activateShield(team);
                     break;
                 case "shoot":
                     shoot(team);
