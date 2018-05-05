@@ -42,59 +42,77 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         airConsole.onActivePlayersChange = gameState.leaveGame;
 
         // link game state changes and update of DOM
-        gameState.on('update', function(state) {
-            document.getElementById('gamestate').innerHTML = JSON.stringify(state);
-            console.log(state.teamA,state.teamB);
+        gameState.on('update', function(updateChange) {
 
-            game.updateBoat('top', {velocity: state.teamA.velocity});
-            game.updateBoat('bottom', {velocity: state.teamB.velocity});
+            // debug
+            document.getElementById('gamestate').innerHTML = JSON.stringify(updateChange.state);
 
-            if (state.teamA.cannonLoaded && state.teamA.shootCannon) {
-                game.updateBoat('top', {shoot: true});
-            }
-            if (state.teamB.cannonLoaded && state.teamB.shootCannon) {
-                game.updateBoat('bottom', {shoot: true});
-            }
+            switch(updateChange.action) {
+                case 'startAction':
+                    var teamAShield = updateChange.stateteamA.player.length > 0;
+                    for (var i = 0; i < updateChange.stateteamA.player.length; i++) {
+                        var playerA = updateChange.stateplayer[updateChange.stateteamA.player[i]];
+                        if (typeof(playerA.actions) === 'undefined') {
+                            teamAShield = false;
+                            break;
+                        }
+                        if (!playerA.actions.hasOwnProperty('shield') || !playerA.actions.shield) {
+                            teamAShield = false;
+                            break;
+                        }
+                    }
+                    console.log('team a shield ', teamAShield);
+                    if (teamAShield) {
+                        game.updateBoat('top', {shield: true});
+                    }
 
-            var teamAShield = state.teamA.player.length > 0;
-            for (var i = 0; i < state.teamA.player.length; i++) {
-                var playerA = state.player[state.teamA.player[i]];
-                if (typeof(playerA.actions) === 'undefined') {
-                    teamAShield = false;
+                    var teamBShield = updateChange.stateteamB.player.length > 0;
+                    for (var j = 0; j < updateChange.stateteamB.player.length; j++) {
+                        var playerB = updateChange.stateplayer[updateChange.stateteamB.player[j]];
+                        if (typeof(playerB.actions) === 'undefined') {
+                            teamBShield = false;
+                            break;
+                        }
+                        if (!playerB.actions.hasOwnProperty('shield') || !playerB.actions.shield) {
+                            teamBShield = false;
+                            break;
+                        }
+                    }
+                    console.log('team b shield ', teamBShield);
+                    if (teamBShield) {
+                        game.updateBoat('bottom', {shield: true});
+                    }
+
+
+
+                    if (updateChange.state.teamA.fullstop) {
+                        game.updateBoat('top', {fullstop: true});
+                    }
+                    if (updateChange.state.teamB.fullstop) {
+                        game.updateBoat('bottom', {fullstop: true});
+                    }
+
                     break;
-                }
-                if (!playerA.actions.hasOwnProperty('shield') || !playerA.actions.shield) {
-                    teamAShield = false;
+                case 'stopAction':
                     break;
-                }
-            }
-            console.log('team a shield ', teamAShield);
-            if (teamAShield) {
-                game.updateBoat('top', {shield: true});
-            }
-
-            var teamBShield = state.teamB.player.length > 0;
-            for (var j = 0; j < state.teamB.player.length; j++) {
-                var playerB = state.player[state.teamB.player[j]];
-                if (typeof(playerB.actions) === 'undefined') {
-                    teamBShield = false;
+                case 'joinTeam':
                     break;
-                }
-                if (!playerB.actions.hasOwnProperty('shield') || !playerB.actions.shield) {
-                    teamBShield = false;
+                case 'leaveGame':
                     break;
-                }
-            }
-            console.log('team b shield ', teamBShield);
-            if (teamBShield) {
-                game.updateBoat('bottom', {shield: true});
-            }
-
-            if (state.teamA.fullstop) {
-                game.updateBoat('top', {fullstop: true});
-            }
-            if (state.teamB.fullstop) {
-                game.updateBoat('bottom', {fullstop: true});
+                case 'loadCannon':
+                    break;
+                case 'shootCannon':
+                    if (updateChange.state.teamA.cannonLoaded && updateChange.state.teamA.shootCannon) {
+                        game.updateBoat('top', {shoot: true});
+                    }
+                    if (updateChange.state.teamB.cannonLoaded && updateChange.state.teamB.shootCannon) {
+                        game.updateBoat('bottom', {shoot: true});
+                    }
+                    break;
+                case 'accelerate':
+                    game.updateBoat('top', {velocity: updateChange.state.teamA.velocity});
+                    game.updateBoat('bottom', {velocity: updateChange.state.teamB.velocity});
+                    break;
             }
         });
 

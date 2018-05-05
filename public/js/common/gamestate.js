@@ -72,7 +72,10 @@ var GameState = function() {
 
         checkFullstop(state.player[from].team === 'A' ? 'teamA' : 'teamB');
 
-        dispatch('update');
+        dispatch('update', {
+            action: 'startAction',
+            state: state
+        });
     }
 
     function stopAction(from, data) {
@@ -81,12 +84,15 @@ var GameState = function() {
         initPlayer(from);
         delete state.player[from].actions[data.action];
 
-        dispatch('update');
+        dispatch('update', {
+            action: 'stopAction',
+            state: state
+        });
     }
 
     function checkFullstop(teamName) {
-        accelerateLeft = false;
-        accelerateRight = false;
+        var accelerateLeft = false;
+        var accelerateRight = false;
         state[teamName].player.forEach(function(playerIndex) {
             var player = state.player[playerIndex];
             if (typeof player.actions === 'undefined' ||
@@ -134,7 +140,10 @@ var GameState = function() {
             }
         }
 
-        dispatch('update');
+        dispatch('update', {
+            action: 'joinTeam',
+            state: state
+        });
         dispatch('playerChosen', {
             id: from,
             data: state.player[from]
@@ -181,7 +190,10 @@ var GameState = function() {
             delete state.player[playerNumber];
         }
 
-        dispatch('update');
+        dispatch('update', {
+            action: 'leaveGame',
+            state: state
+        });
     }
 
     function loadCannon(from) {
@@ -198,7 +210,10 @@ var GameState = function() {
                 break;
         }
 
-        dispatch('update');
+        dispatch('update', {
+            action: 'loadCannon',
+            state: state
+        });
     }
 
     function shootCannon(from) {
@@ -215,7 +230,10 @@ var GameState = function() {
                 break;
         }
 
-        dispatch('update');
+        dispatch('update', {
+            action: 'shootCannon',
+            state: state
+        });
 
         // reset cannon
 
@@ -230,27 +248,33 @@ var GameState = function() {
                 break;
         }
 
-        dispatch('update');
+        dispatch('update', {
+            action: 'shootCannon',
+            state: state
+        });
     }
 
     // not called directly, that's why the direction is 2nd arg, not data
     function accelerate(from, direction, step) {
         //console.debug('internal acceleration', arguments);
-        if (typeof(step) == 'undefined') {
+        if (typeof(step) === 'undefined') {
             step = accelerationStep;
         }
 
         var team = isNaN(from) ? from : getTeam(from);
         switch (team) {
             case 'A':
-                state.teamA.velocity = (direction >= 0 ? 25 : -25);
+                state.teamA.velocity = (direction >= 0 ? 30 : -30);
                 break;
             case 'B':
-                state.teamB.velocity = (direction >= 0 ? 25 : -25);
+                state.teamB.velocity = (direction >= 0 ? 30 : -30);
                 break;
         }
 
-        dispatch('update');
+        dispatch('update', {
+            action: 'accelerate',
+            state: state
+        });
     }
         /*
         step *= (direction >= 0 ? 1 : -1);
@@ -279,7 +303,10 @@ var GameState = function() {
                 break;
         }
 
-        dispatch('update');
+        dispatch('update', {
+            action: 'accelerate',
+            state: state
+        });
     }
 
     function reduceAcceleration() {
