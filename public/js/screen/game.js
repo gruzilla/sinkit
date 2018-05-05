@@ -290,6 +290,7 @@ var SinkItScreen = function(restart,victory){
     };
 
     var activateShield = function(team){
+        boat[team].data.shield = true;
         boat[team].obj.blendMode = Phaser.BlendModes.ADD;
         var shield = gameObj.tweens.add({
             targets: boat[team].obj,
@@ -341,6 +342,7 @@ var SinkItScreen = function(restart,victory){
     };
 
     return {
+        isRunning: function(){ return !stopUpdate; },
         shoot: shoot,
         updateBoat: updateBoat,
         game: game
