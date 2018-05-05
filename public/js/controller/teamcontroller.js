@@ -61,6 +61,9 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
             return;
         }
 
+        localStorage.removeItem('playerData');
+        localStorage.removeItem('lastVictory');
+
         create();
     });
 

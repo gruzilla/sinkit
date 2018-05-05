@@ -6,26 +6,28 @@ var GameState = function() {
     var accelerationReductionInterval = 750;
     var initialRole = 'both';
     var availableRoles = ['shooter', 'loader'];
-
-    var state = {
-        player: {},
-        teamA: {
-            player: [],
-            acceleration: 0,
-            cannonLoaded: false,
-            shootCannon: false,
-            roleIndex: 0
-        },
-        teamB: {
-            player: [],
-            acceleration: 0,
-            cannonLoaded: false,
-            shootCannon: false,
-            roleIndex: 0
-        }
-    };
-
     var listener = {};
+
+    var state = null;
+    function initState() {
+        state = {
+            player: {},
+            teamA: {
+                player: [],
+                acceleration: 0,
+                cannonLoaded: false,
+                shootCannon: false,
+                roleIndex: 0
+            },
+            teamB: {
+                player: [],
+                acceleration: 0,
+                cannonLoaded: false,
+                shootCannon: false,
+                roleIndex: 0
+            }
+        };
+    }
 
     function dispatch(type, data) {
         if (typeof(data) === 'undefined') {
@@ -273,6 +275,7 @@ var GameState = function() {
 
     return {
         on: on,
+        initState: initState,
 
         startAction: startAction,
         stopAction: stopAction,
