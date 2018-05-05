@@ -5,15 +5,17 @@
  */
 
 var SinkItScreen = function(restart,victory){
-    var drag = 30;
+    var drag = 40;
     var friction = 10;
-    var maxVelocity = 160;
+    var maxVelocity = 200;
     var boatLives = 3;
     var boatScale = 0.4;
     var restartCallback = restart;
     var victoryCallback = victory;
     var stopUpdate = false;
     var ignoreHits = false;
+    var bulletAcceleration = 30;
+    var bulletSpeed = 120;
 
     var screenWidth = window.innerWidth;
     var screenHeight = window.innerHeight;
@@ -157,7 +159,7 @@ var SinkItScreen = function(restart,victory){
         }
         bullet.setBounce(0);
         bullet.setCollideWorldBounds(false);
-        bullet.setVelocityY(100 * inverse);
+        bullet.setVelocityY(bulletSpeed * inverse);
         if(firingBoat.body.velocity.x < 0){
             bullet.setVelocityX(Math.random()*-10);
             bullet.setAccelerationX(-0.25 * firingBoat.body.acceleration.x);
@@ -165,7 +167,7 @@ var SinkItScreen = function(restart,victory){
             bullet.setVelocityX(Math.random()*10);
             bullet.setAccelerationX(0.25 * firingBoat.body.acceleration.x);
         }
-        bullet.setAccelerationY(20 * inverse);
+        bullet.setAccelerationY(bulletAcceleration * inverse);
         physics.add.overlap(bullet, boat.bottom.obj, hitBoat, null, this);
         physics.add.overlap(bullet, boat.top.obj, hitBoat, null, this);
         bullets.push(bullet);
@@ -297,7 +299,7 @@ var SinkItScreen = function(restart,victory){
             duration: 400,
             ease: 'Cubic.easeInOut',
             delay: 0,
-            repeat: 2,
+            repeat: 3,
             yoyo: true
         });
         shield.setCallback("onComplete",function(team){
