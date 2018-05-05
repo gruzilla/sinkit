@@ -5,8 +5,8 @@
  */
 
 var SinkItScreen = function(restart,victory){
-    var drag = 20;
-    var maxVelocity = 100;
+    var drag = 30;
+    var maxVelocity = 160;
     var boatLives = 1;
     var boatScale = 0.4;
     var restartCallback = restart;
