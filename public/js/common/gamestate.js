@@ -73,6 +73,7 @@ var GameState = function() {
         checkFullstop(state.player[from].team === 'A' ? 'teamA' : 'teamB');
 
         dispatch('update', {
+            team: getTeam(from),
             action: 'startAction',
             state: state
         });
@@ -85,6 +86,7 @@ var GameState = function() {
         delete state.player[from].actions[data.action];
 
         dispatch('update', {
+            team: getTeam(from),
             action: 'stopAction',
             state: state
         });
@@ -141,10 +143,12 @@ var GameState = function() {
         }
 
         dispatch('update', {
+            team: getTeam(from),
             action: 'joinTeam',
             state: state
         });
         dispatch('playerChosen', {
+            team: getTeam(from),
             id: from,
             data: state.player[from]
         });
@@ -159,6 +163,7 @@ var GameState = function() {
                 state.player[state.teamA.player[0]].team = 'A';
 
                 dispatch('playerChosen', {
+                    team: getTeam(from),
                     id: state.teamA.player[0],
                     data: state.player[state.teamA.player[0]]
                 });
@@ -172,6 +177,7 @@ var GameState = function() {
                 state.player[state.teamB.player[0]].team = 'B';
 
                 dispatch('playerChosen', {
+                    team: getTeam(from),
                     id: state.teamB.player[0],
                     data: state.player[state.teamB.player[0]]
                 });
@@ -211,6 +217,7 @@ var GameState = function() {
         }
 
         dispatch('update', {
+            team: getTeam(from),
             action: 'loadCannon',
             state: state
         });
@@ -231,6 +238,7 @@ var GameState = function() {
         }
 
         dispatch('update', {
+            team: getTeam(from),
             action: 'shootCannon',
             state: state
         });
@@ -249,6 +257,7 @@ var GameState = function() {
         }
 
         dispatch('update', {
+            team: getTeam(from),
             action: 'shootCannon',
             state: state
         });
@@ -272,6 +281,7 @@ var GameState = function() {
         }
 
         dispatch('update', {
+            team: getTeam(from),
             action: 'accelerate',
             state: state
         });
@@ -304,6 +314,7 @@ var GameState = function() {
         }
 
         dispatch('update', {
+            team: getTeam(from),
             action: 'accelerate',
             state: state
         });
