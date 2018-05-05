@@ -45,7 +45,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         gameState.on('update', function(state) {
             document.getElementById('gamestate').innerHTML = JSON.stringify(state);
             console.log(state.teamA,state.teamB);
-            
+
             game.updateBoat('top', {velocity: state.teamA.velocity});
             game.updateBoat('bottom', {velocity: state.teamB.velocity});
 
@@ -56,14 +56,16 @@ var Screen = function(messageDispatcher, gameState, airConsole){
                 game.updateBoat('bottom', {shoot: true});
             }
 
-            var teamAShield = false;
+            var teamAShield = state.teamA.player.length > 0;
             for (var i = 0; i < state.teamA.player.length; i++) {
                 var playerA = state.teamA.player[i];
                 if (typeof(playerA.actions) === 'undefined') {
+                    teamAShield = false;
                     break;
                 }
-                if (playerA.actions.hasOwnProperty('shield') && playerA.actions.shield) {
-                    teamAShield = teamAShield && true;
+                if (!playerA.actions.hasOwnProperty('shield') || !playerA.actions.shield) {
+                    teamAShield = false;
+                    break;
                 }
             }
             console.log('team a shield ', teamAShield);
@@ -71,14 +73,16 @@ var Screen = function(messageDispatcher, gameState, airConsole){
                 game.updateBoat('top', {shield: true});
             }
 
-            var teamBShield = false;
+            var teamBShield = state.teamB.player.length > 0;
             for (var j = 0; j < state.teamB.player.length; j++) {
                 var playerB = state.teamB.player[j];
                 if (typeof(playerB.actions) === 'undefined') {
+                    teamBShield = false;
                     break;
                 }
-                if (playerB.actions.hasOwnProperty('shield') && playerB.actions.shield) {
-                    teamBShield = teamBShield && true;
+                if (!playerB.actions.hasOwnProperty('shield') || !playerB.actions.shield) {
+                    teamBShield = false;
+                    break;
                 }
             }
             console.log('team b shield ', teamBShield);
