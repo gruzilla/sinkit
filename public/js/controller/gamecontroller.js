@@ -139,9 +139,9 @@ var GameController = function(divId, messageDispatcher, airConsole) {
             '</div>' +
             '</div>' +
             '<div class="buttons">' +
-            '<div id="accelerateLeft" class="big grad-left button"></div>' +
+            '<div id="accelerateLeft" class="big grad-left button"><</div>' +
             actionButton +
-            '<div id="accelerateRight" class="big grad-right button"></div>' +
+            '<div id="accelerateRight" class="big grad-right button">></div>' +
             '</div>';
 
         html += '<div class="buttons">'+
