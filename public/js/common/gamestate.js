@@ -8,24 +8,22 @@ var GameState = function() {
     var availableRoles = ['shooter', 'loader'];
     var listener = {};
 
-    var state = null;
+    var state = {};
     function initState() {
-        state = {
-            player: {},
-            teamA: {
-                player: [],
-                acceleration: 0,
-                cannonLoaded: false,
-                shootCannon: false,
-                roleIndex: 0
-            },
-            teamB: {
-                player: [],
-                acceleration: 0,
-                cannonLoaded: false,
-                shootCannon: false,
-                roleIndex: 0
-            }
+        state.player = {};
+        state.teamA = {
+            player: [],
+            acceleration: 0,
+            cannonLoaded: false,
+            shootCannon: false,
+            roleIndex: 0
+        };
+        state.teamB = {
+            player: [],
+            acceleration: 0,
+            cannonLoaded: false,
+            shootCannon: false,
+            roleIndex: 0
         };
     }
 
