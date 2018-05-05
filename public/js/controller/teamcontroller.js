@@ -55,6 +55,15 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
         onFinishedCallback();
     });
 
+    /** listen for specific messages **/
+    messageDispatcher.register('restartController', function(from, data) {
+        if (from !== AirConsole.SCREEN) {
+            return;
+        }
+
+        create();
+    });
+
     return {
         create: create,
         onFinished: onFinished
