@@ -4,12 +4,13 @@
  * and open the template in the editor.
  */
 
-var SinkItScreen = function(restart){
+var SinkItScreen = function(restart,victory){
     var drag = 20;
     var maxVelocity = 100;
     var boatLives = 1;
     var boatScale = 0.4;
     var restartCallback = restart;
+    var victoryCallback = victory;
     var stopUpdate = false;
     var ignoreHits = false;
 
@@ -40,6 +41,7 @@ var SinkItScreen = function(restart){
     var mainCamera;
     var topCamera;
     var bottomCamera;
+    var victoryTop, victoryBottom;
     
     var boat = {
         top: {
@@ -66,6 +68,8 @@ var SinkItScreen = function(restart){
         this.load.image('boatBottom', 'assets/boat-red.png');
         this.load.image('boatTop', 'assets/boat-green.png');
         this.load.image('water', 'assets/water.png');
+        this.load.image('victory-top', 'assets/boat-green.png');
+        this.load.image('victory-bottom', 'assets/boat-red.png');
         this.load.image('cannonball', 'assets/cannonball.png');
         //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     };
@@ -78,7 +82,17 @@ var SinkItScreen = function(restart){
         physics = this.physics; //ugly hack2
         mainCamera = this.cameras.add(0,0,screenWidth,screenHeight);
         
-        this.add.image(0, 0, 'water').setScale(window.innerWidth,window.innerHeight);
+        
+        
+        this.add.image(0, 0, 'water').setScale(screenWidth,screenHeight);
+        
+        victoryTop = this.add.image(screenWidth * 0.5,screenHeight * 0.5,'victory-top').setInteractive();
+        victoryTop.alpha = 0;
+        victoryTop.on('pointerup',restartCallback);
+        victoryBottom = this.add.image(screenWidth * 0.5,screenHeight * 0.5,'victory-bottom').setInteractive();
+        victoryBottom.alpha = 0;
+        victoryBottom.on('pointerup',restartCallback);
+
         
         boat.top.obj = this.physics.add.image(0,70, 'boatTop').setScale(boatScale);
         boat.top.obj.x = Math.max(40, boat.top.obj.getBounds().width*0.5 + Math.random() * (window.innerWidth - boat.top.obj.getBounds().width) - 40);
@@ -146,10 +160,9 @@ var SinkItScreen = function(restart){
             boatScale *= 0.995;
             boatScale = Math.max(0,boatScale);
             boat.bottom.obj.setScale(boatScale);
+            victoryTop.alpha += 0.007;
         } else if(boat.bottom.data.lives == 0 && boat.bottom.obj.alpha <= 0){
             stopUpdate = true;
-            alert("Team Top hat gewonnen!");
-            restartCallback();
         }
         
         if(boat.top.data.lives == 0 && boat.top.obj.alpha > 0){
@@ -158,10 +171,9 @@ var SinkItScreen = function(restart){
             boatScale = Math.max(0,boatScale);
             boat.top.obj.angle *= 1.04;
             boat.top.obj.setScale(boatScale);
+            victoryBottom.alpha += 0.007;
         } else if(boat.top.data.lives == 0 && boat.top.obj.alpha <= 0){
             stopUpdate = true;
-            alert("Team Bottom hat gewonnen!");
-            restartCallback();
         }
         
     };
@@ -172,8 +184,16 @@ var SinkItScreen = function(restart){
         var lives = boat[hitBoat.name].data.lives;
 
         if(lives == 0){
+            var winner = "top";
+            if(hitBoat.name == "top"){
+                winner = "bottom";
+            }
+            victoryCallback(winner);
             hitBoat.angle = 1;
             ignoreHits = true;
+            setTimeout(function(){
+                victoryCallback();
+            },500);
         }
         mainCamera.shake(150);
         attacker.alpha = 0;
