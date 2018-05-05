@@ -77,6 +77,13 @@ var Screen = function(messageDispatcher, gameState, airConsole){
             if (teamBShield) {
                 game.updateBoat('bottom', {shield: true});
             }
+
+            if (state.teamA.fullstop) {
+                game.updateBoat('top', {fullstop: true});
+            }
+            if (state.teamB.fullstop) {
+                game.updateBoat('bottom', {fullstop: true});
+            }
         });
 
         gameState.on('playerChosen', function(data) {
