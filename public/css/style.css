@@ -27,7 +27,11 @@ body {
     border-radius: 10px;
 }
 
-#loadCannon.cooldown, #shootCannon.cooldown {
+#shield {
+    background-color: deepskyblue;
+}
+
+#loadCannon.cooldown, #shootCannon.cooldown, #shield.cooldown {
     background-color: grey;
 }
 

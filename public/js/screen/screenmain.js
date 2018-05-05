@@ -45,14 +45,36 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         gameState.on('update', function(state) {
             document.getElementById('gamestate').innerHTML = JSON.stringify(state);
 
-            game.updateBoat('top', {acceleration: state.teamA.acceleration});
-            game.updateBoat('bottom', {acceleration: state.teamB.acceleration});
+            game.updateBoat('top', {velocity: state.teamA.velocity});
+            game.updateBoat('bottom', {velocity: state.teamB.velocity});
 
             if (state.teamA.cannonLoaded && state.teamA.shootCannon) {
                 game.updateBoat('top', {shoot: true});
             }
             if (state.teamB.cannonLoaded && state.teamB.shootCannon) {
                 game.updateBoat('bottom', {shoot: true});
+            }
+
+            var teamAShield = true;
+            for (var i = 0; i < state.teamA.player; i++) {
+                if (!state.player[i].actions.hasOwnProperty('shield') || !state.player[i].actions.shield) {
+                    teamAShield = false;
+                    break;
+                }
+            }
+            if (teamAShield) {
+                game.updateBoat('top', {shield: true});
+            }
+
+            var teamBShield = true;
+            for (var j = 0; j < state.teamB.player; j++) {
+                if (!state.player[j].actions.hasOwnProperty('shield') || !state.player[i].actions.shield) {
+                    teamAShield = false;
+                    break;
+                }
+            }
+            if (teamBShield) {
+                game.updateBoat('bottom', {shield: true});
             }
         });
 
@@ -61,7 +83,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         });
 
         // initialize acceleration obstacle
-        gameState.startAccelerationTimer();
+        // gameState.startAccelerationTimer();
     }
 
     initialize();
