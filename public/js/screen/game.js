@@ -5,7 +5,8 @@
  */
 
 var SinkItScreen = function(restart,victory){
-    var drag = 30;
+    var drag = 10;
+    var friction = 0.2;
     var maxVelocity = 160;
     var boatLives = 1;
     var boatScale = 0.4;
@@ -68,8 +69,8 @@ var SinkItScreen = function(restart,victory){
         this.load.image('boatBottom', 'assets/boat-red-cannon.png');
         this.load.image('boatTop', 'assets/boat-green-cannon.png');
         this.load.image('water', 'assets/water.png');
-        this.load.image('victory-top', 'assets/boat-green.png');
-        this.load.image('victory-bottom', 'assets/boat-red.png');
+        this.load.image('victory-top', 'assets/pirate-green.png');
+        this.load.image('victory-bottom', 'assets/pirate-red.png');
         this.load.image('cannonball', 'assets/cannonball.png');
         //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     };
@@ -85,20 +86,13 @@ var SinkItScreen = function(restart,victory){
         
         
         this.add.image(0, 0, 'water').setScale(screenWidth,screenHeight);
-        
-        victoryTop = this.add.image(screenWidth * 0.5,screenHeight * 0.5,'victory-top').setInteractive();
-        victoryTop.alpha = 0;
-        victoryTop.on('pointerup',restartCallback);
-        victoryBottom = this.add.image(screenWidth * 0.5,screenHeight * 0.5,'victory-bottom').setInteractive();
-        victoryBottom.alpha = 0;
-        victoryBottom.on('pointerup',restartCallback);
-
-        
+                
         boat.top.obj = this.physics.add.image(0,70, 'boatTop').setScale(boatScale);
         boat.top.obj.x = Math.max(40, boat.top.obj.getBounds().width*0.5 + Math.random() * (window.innerWidth - boat.top.obj.getBounds().width) - 40);
         boat.top.obj.setBounce(0);
         boat.top.obj.setCollideWorldBounds(true);
         boat.top.obj.setDragX(drag);
+        boat.top.obj.setFrictionX(friction);
         boat.top.obj.setMaxVelocity(maxVelocity);
         boat.top.obj.name = "top";
         
@@ -108,8 +102,16 @@ var SinkItScreen = function(restart,victory){
         boat.bottom.obj.setBounce(0);
         boat.bottom.obj.setCollideWorldBounds(true);
         boat.bottom.obj.setDragX(drag);
+        boat.bottom.obj.setFrictionX(friction);
         boat.bottom.obj.setMaxVelocity(maxVelocity);
         boat.bottom.obj.name = "bottom";
+        
+        victoryTop = this.add.image(screenWidth * 0.5,screenHeight * 0.5,'victory-top').setScale(0.8).setInteractive();
+        victoryTop.alpha = 0;
+        victoryTop.on('pointerup',restartCallback);
+        victoryBottom = this.add.image(screenWidth * 0.5,screenHeight * 0.5,'victory-bottom').setScale(0.8).setInteractive();
+        victoryBottom.alpha = 0;
+        victoryBottom.on('pointerup',restartCallback);
 
     };
     
