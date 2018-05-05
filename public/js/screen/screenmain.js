@@ -16,7 +16,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         delete game;
         messageDispatcher.broadcast('restartController');
         document.getElementById("game").innerHTML = "";
-        game = new SinkItScreen(restart);
+        game = new SinkItScreen(restart, victory);
     };
 
     game = new SinkItScreen(restart,victory);
