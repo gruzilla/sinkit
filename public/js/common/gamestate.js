@@ -70,7 +70,7 @@ var GameState = function() {
         initPlayer(from);
         state.player[from].actions[data.action] = true;
 
-        checkFullstop(state.player[from].team);
+        checkFullstop(state.player[from].team === 'A' ? 'teamA' : 'teamB');
 
         dispatch('update');
     }
@@ -85,6 +85,7 @@ var GameState = function() {
     }
 
     function checkFullstop(teamName) {
+        console.log('teamName', teamName);
         accelerateLeft = false;
         accelerateRight = false;
         state[teamName].player.forEach(function(player) {
@@ -232,6 +233,7 @@ var GameState = function() {
             step = accelerationStep;
         }
 
+        var team = isNaN(from) ? from : getTeam(from);
         switch (team) {
             case 'A':
                 state.teamA.velocity = (direction >= 0 ? 25 : -25);
