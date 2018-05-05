@@ -89,7 +89,8 @@ var GameState = function() {
         accelerateLeft = false;
         accelerateRight = false;
         state[teamName].player.forEach(function(player) {
-            if (typeof player.actions['accelerateLeft'] === 'undefined' ||
+            if (typeof player.actions === 'undefined' ||
+                typeof player.actions['accelerateLeft'] === 'undefined' ||
                 typeof player.actions['accelerateRight'] === 'undefined'
             ) {
                 return false;
