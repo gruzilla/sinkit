@@ -6,6 +6,8 @@
 
 var TeamController = function(divId, messageDispatcher, airConsole) {
 
+    var DEBUG = false;
+
     var onFinishedCallback = function() {};
 
     /** game actions **/
@@ -15,6 +17,11 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
             'joinTeam',
             { team: team }
         );
+        if (DEBUG) {
+            data = {role:'shooter', team: 'A'};
+            localStorage.setItem('playerData', JSON.stringify(data));
+            onFinishedCallback();
+        }
 
         return false;
     }
@@ -28,8 +35,10 @@ var TeamController = function(divId, messageDispatcher, airConsole) {
 
         document.getElementById(divId).innerHTML = '' +
             '<div id="header"><div id="title" class="v-center">Choose your team</div></div>' +
+            '<div class="buttons">' +
             '<div id="teamA" class="button">Team Green</div>' +
-            '<div id="teamB" class="button">Team Red</div>';
+            '<div id="teamB" class="button">Team Red</div>' +
+            '</div>';
 
         // register event listener
         document.getElementById('teamA').addEventListener('touchstart', function () { return joinTeam('A'); });

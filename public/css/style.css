@@ -9,6 +9,7 @@ body {
 }
 
 .button {
+    font-size: 4em;
     width: 25vw;
     height: 25vh;
     min-height: 40px;
@@ -19,11 +20,6 @@ body {
     align-content: center;
     flex-direction:column; /* column | row */
     font-size: 2em;
-}
-
-#fire, #shootCannon {
-    background-color: deeppink;
-    border: 3px solid black;
 }
 
 #loadCannon {
@@ -62,14 +58,12 @@ body {
 }
 
 .big {
-  font-size: 8em;
   color: white;
 }
 
 .large {
   border: 1px solid #FE9748;
   width: 40vw;
-  font-size: 5em;
   color: #FE9748;
   margin-left: 10px;
   margin-right: 10px;

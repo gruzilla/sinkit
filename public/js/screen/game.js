@@ -63,8 +63,8 @@ var SinkItScreen = function(restart){
     function preload()
     {
                         
-        this.load.image('boatBottom', 'assets/boat-red.png');
-        this.load.image('boatTop', 'assets/boat-green.png');
+        this.load.image('boatBottom', 'assets/boat-red-cannon.png');
+        this.load.image('boatTop', 'assets/boat-green-cannon.png');
         this.load.image('water', 'assets/water.png');
         this.load.image('cannonball', 'assets/cannonball.png');
         //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
