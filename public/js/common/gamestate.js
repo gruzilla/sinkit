@@ -13,6 +13,7 @@ var GameState = function() {
         state.player = {};
         state.teamA = {
             player: [],
+            velocity: 0,
             acceleration: 0,
             cannonLoaded: false,
             shootCannon: false,
@@ -20,6 +21,7 @@ var GameState = function() {
         };
         state.teamB = {
             player: [],
+            velocity: 0,
             acceleration: 0,
             cannonLoaded: false,
             shootCannon: false,
@@ -211,6 +213,16 @@ var GameState = function() {
             step = accelerationStep;
         }
 
+        switch (team) {
+            case 'A':
+                state.teamA.velocity = (direction >= 0 ? 25 : -25);
+                break;
+            case 'B':
+                state.teamB.velocity = (direction >= 0 ? 25 : -25);
+                break;
+        }
+    }
+        /*
         step *= (direction >= 0 ? 1 : -1);
         var minMax = direction >= 0 ? 'min' : 'max';
         var accelerationCmp = direction >= 0 ? accelerationMax : accelerationMin;
@@ -271,6 +283,7 @@ var GameState = function() {
             accelerationReductionInterval
         );
     }
+    */
 
     return {
         on: on,
@@ -297,6 +310,6 @@ var GameState = function() {
                     break;
             }
         },
-        startAccelerationTimer: startAccelerationTimer
+        // startAccelerationTimer: startAccelerationTimer
     };
 };

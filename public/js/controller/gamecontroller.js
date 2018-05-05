@@ -9,6 +9,7 @@ var GameController = function(divId, messageDispatcher, airConsole) {
     var coolDown = {
         loadCannon: false,
         shootCannon: false,
+        shield: false
     };
     var coolDownTimeout = 1000;
     var coolDownInterval = 10;
@@ -16,17 +17,21 @@ var GameController = function(divId, messageDispatcher, airConsole) {
 
     /** game actions **/
     // long running actions
-    function startAction() {
+    function startShield() {
+        if (coolDown.shield) {
+            return;
+        }
         messageDispatcher.send(
             'startAction',
-            { action: 'fire' }
+            { action: 'shield' }
         );
+        startCoolDown('shield');
         return false;
     }
-    function stopAction() {
+    function stopShield() {
         messageDispatcher.send(
             'stopAction',
-            { action: 'fire' }
+            { action: 'shield' }
         );
         return false;
     }
@@ -135,21 +140,19 @@ var GameController = function(divId, messageDispatcher, airConsole) {
             actionButton +
             '<div id="accelerateRight" class="big grad-right button">></div>' +
             '</div>';
-            //'<div id="loadCannon" class="button">LOAD</div>' +
-            //'<!--<div id="fire" class="button">FIRE</div>-->' +
-            //'<div id="shootCannon" class="button">SHOOT</div>' +
-            //'<div id="vibrate" class="button">vibe</div>';
 
 
         html += '<div id="vibrate" class="button large">vibe</div>' +
-            alternativeActionButton;
+            alternativeActionButton +
+            '<div id="shield" class="button large">shield</div>'
+        ;
 
         // '<!--<div id="fire" class="button">FIRE</div>-->' +
 
         document.getElementById(divId).innerHTML = html;
         // register event listener
-        //document.getElementById('fire').addEventListener('touchstart', startAction);
-        //document.getElementById('fire').addEventListener('touchend', stopAction);
+        document.getElementById('shield').addEventListener('touchstart', startShield);
+        document.getElementById('shield').addEventListener('touchend', stopShield);
 
         if (playerData.role === 'shooter' || playerData.role === 'both') {
             document.getElementById('shootCannon').addEventListener('touchstart', shootCannon);
