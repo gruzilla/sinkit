@@ -101,22 +101,22 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         return false;
     }
 
-    function preload () {
-        //this.load.image('sky', 'src/games/firstgame/assets/sky.png');
-        //this.load.spritesheet('dude', 'src/games/firstgame/assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-    }
-
     function create () {
         airConsole.setOrientation(AirConsole.ORIENTATION_LANDSCAPE);
         var playerData = JSON.parse(localStorage.getItem('playerData'));
 
         var actionButton = '<div id="loadCannon" class="large button">LOAD</div>';
+        var alternativeActionButton = actionButton;
         var teamName = playerData.team === 'A' ? 'Team Green' : 'Team Red';
-        var roleName = 'Helmnsman';
+        var roleName = 'Helmsman';
 
         if (playerData.role === 'shooter') {
+            alternativeActionButton = '';
             actionButton = '<div id="shootCannon" class="large button">SHOOT</div>';
-            roleName = 'Cannonier';
+            roleName = 'Cannoneer';
+        } else if (playerData.role === 'both') {
+            actionButton = '<div id="shootCannon" class="large button">SHOOT</div>';
+            roleName = 'Both';
         }
 
         var html = '' +
@@ -139,7 +139,8 @@ var GameController = function(divId, messageDispatcher, airConsole) {
             //'<div id="vibrate" class="button">vibe</div>';
 
 
-        html += '<div id="vibrate" class="button large">vibe</div>';
+        html += '<div id="vibrate" class="button large">vibe</div>' +
+            alternativeActionButton;
 
         // '<!--<div id="fire" class="button">FIRE</div>-->' +
 
@@ -164,10 +165,10 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         messageDispatcher.register('vibrate', function() {
             airConsole.vibrate(200);
         });
-    }
-
-    function update () {
-
+        messageDispatcher.register('victory', function(data) {
+            localStorage.setItem('lastVictory', data);
+            onFinishedCallback();
+        });
     }
 
     return {

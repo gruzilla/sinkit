@@ -24,11 +24,15 @@
 
             var teamCtrl = new TeamController('controller', md, air_console);
             var gameCtrl = new GameController('controller', md, air_console);
+            var victoryCtrl = new VictoryController('controller', md, air_console);
 
             teamCtrl.create();
             teamCtrl.onFinished(function() {
                 gameCtrl.create();
-            })
+            });
+            gameCtrl.onFinished(function() {
+                victoryCtrl.create();
+            });
         </script>
     </body>
 </html>
