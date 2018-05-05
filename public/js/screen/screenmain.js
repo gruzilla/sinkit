@@ -69,7 +69,7 @@ var Screen = function(messageDispatcher, gameState, airConsole){
             var teamBShield = true;
             for (var j = 0; j < state.teamB.player; j++) {
                 if (!state.player[j].actions.hasOwnProperty('shield') || !state.player[i].actions.shield) {
-                    teamAShield = false;
+                    teamBShield = false;
                     break;
                 }
             }
