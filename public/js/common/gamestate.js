@@ -116,7 +116,8 @@ var GameState = function() {
                 if (state.teamA.roleIndex >= availableRoles.length) {
                     state.teamA.roleIndex = 0;
                 }
-                state.player[state.teamA.player[0]].team = newARole;
+                state.player[state.teamA.player[0]].role = newARole;
+                state.player[state.teamA.player[0]].team = 'A';
 
                 dispatch('playerChosen', {
                     id: state.teamA.player[0],
@@ -128,7 +129,8 @@ var GameState = function() {
                 if (state.teamB.roleIndex >= availableRoles.length) {
                     state.teamB.roleIndex = 0;
                 }
-                state.player[state.teamB.player[0]].team = newBRole;
+                state.player[state.teamB.player[0]].role = newBRole;
+                state.player[state.teamB.player[0]].team = 'B';
 
                 dispatch('playerChosen', {
                     id: state.teamB.player[0],
