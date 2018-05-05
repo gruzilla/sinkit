@@ -21,19 +21,26 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         if (coolDown.shield) {
             return;
         }
-        messageDispatcher.send(
-            'startAction',
-            { action: 'shield' }
-        );
+        startAction('shield');
         startCoolDown('shield');
         return false;
     }
     function stopShield() {
+        stopAction('shield');
+        return false;
+    }
+
+    function startAction(action) {
+        messageDispatcher.send(
+            'startAction',
+            { action: action }
+        );
+    }
+    function stopaction(action) {
         messageDispatcher.send(
             'stopAction',
-            { action: 'shield' }
+            { action: action }
         );
-        return false;
     }
 
     function onFinished(callback) {
@@ -79,11 +86,13 @@ var GameController = function(divId, messageDispatcher, airConsole) {
     // local event-listeners, that send or broadcast messages
     function accelerateRight() {
         airConsole.vibrate(hapticFeedback);
+        startAction('accelerateRight');
         messageDispatcher.send('accelerate', {direction:'right'});
         return false;
     }
     function accelerateLeft() {
         airConsole.vibrate(hapticFeedback);
+        startAction('accelerateLeft');
         messageDispatcher.send('accelerate', {direction:'left'});
         return false;
     }
@@ -167,7 +176,9 @@ var GameController = function(divId, messageDispatcher, airConsole) {
         }
 
         document.getElementById('accelerateRight').addEventListener('touchstart', accelerateRight);
+        document.getElementById('accelerateRight').addEventListener('touchend', stopAction.bind('accelerateRight'));
         document.getElementById('accelerateLeft').addEventListener('touchstart', accelerateLeft);
+        document.getElementById('accelerateLeft').addEventListener('touchend', stopAction.bind('accelerateLeft'));
         document.getElementById('vibrate').addEventListener('touchstart', vibrate);
 
         // message handler registration

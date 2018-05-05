@@ -17,6 +17,7 @@ var GameState = function() {
             acceleration: 0,
             cannonLoaded: false,
             shootCannon: false,
+            fullstop: false,
             roleIndex: 0
         };
         state.teamB = {
@@ -25,6 +26,7 @@ var GameState = function() {
             acceleration: 0,
             cannonLoaded: false,
             shootCannon: false,
+            fullstop: false,
             roleIndex: 0
         };
     }
@@ -68,6 +70,8 @@ var GameState = function() {
         initPlayer(from);
         state.player[from].actions[data.action] = true;
 
+        checkFullstop(state.player[from].team);
+
         dispatch('update');
     }
 
@@ -78,6 +82,21 @@ var GameState = function() {
         delete state.player[from].actions[data.action];
 
         dispatch('update');
+    }
+
+    function checkFullstop(teamName) {
+        accelerateLeft = false;
+        accelerateRight = false;
+        state[teamName].player.forEach(function(player) {
+            if (player.actions['accelerateLeft'] === true) {
+                accelerateLeft = true;
+            } else if (player.actions['accelerateRight'] === true) {
+                accelerateRight = true;
+            }
+        });
+        if (accelerateLeft && accelerateRight) {
+            state[teamName].fullstop = true;
+        }
     }
 
     function joinTeam(from, data) {

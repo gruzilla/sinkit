@@ -44,7 +44,8 @@ var Screen = function(messageDispatcher, gameState, airConsole){
         // link game state changes and update of DOM
         gameState.on('update', function(state) {
             document.getElementById('gamestate').innerHTML = JSON.stringify(state);
-
+            console.log(state.teamA,state.teamB);
+            
             game.updateBoat('top', {velocity: state.teamA.velocity});
             game.updateBoat('bottom', {velocity: state.teamB.velocity});
 
@@ -79,6 +80,13 @@ var Screen = function(messageDispatcher, gameState, airConsole){
             console.log('team b shield ', teamBShield);
             if (teamBShield) {
                 game.updateBoat('bottom', {shield: true});
+            }
+
+            if (state.teamA.fullstop) {
+                game.updateBoat('top', {fullstop: true});
+            }
+            if (state.teamB.fullstop) {
+                game.updateBoat('bottom', {fullstop: true});
             }
         });
 
